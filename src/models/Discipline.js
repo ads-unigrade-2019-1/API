@@ -8,10 +8,10 @@ const teacher = require('./Teacher');
 const DisciplineSchema = mongoose.Schema({
     name : String,
     department : String,
-    credit : Number,
+    credits : Number,
     category : String,
-    class : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class' }],
-    requirement : [{type: mongoose.Schema.Types.ObjectId, ref: 'discipline', required: false}],
+    classes : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class' }],
+    requirements : [{type: mongoose.Schema.Types.ObjectId, ref: 'discipline', required: false}],
     course : [{type: mongoose.Schema.Types.ObjectId, ref: 'course'}]
 });
 
