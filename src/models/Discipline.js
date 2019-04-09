@@ -12,7 +12,7 @@ const DisciplineSchema = mongoose.Schema({
     category : String,
     classes : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class' }],
     requirements : [{type: mongoose.Schema.Types.ObjectId, ref: 'discipline', required: false}],
-    course : [{type: mongoose.Schema.Types.ObjectId, ref: 'course'}]
+    courses : [{type: mongoose.Schema.Types.ObjectId, ref: 'course'}]
 });
 
 const Discipline = module.exports = mongoose.model('Discipline', DisciplineSchema);
