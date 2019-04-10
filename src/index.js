@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 
 const app = express()
 
-// mongoose.connect('mongodb+srv://goweek:goweek123@cluster0-nnsd9.mongodb.net/test?retryWrites=true', {
-//     useNewUrlParser : true 
-// });
+mongoose.connect('mongodb+srv://unigrade:unigrade@cluster0-c4e9y.mongodb.net/test?retryWrites=true', {
+    useNewUrlParser : true 
+});
 
 app.use(express.json());
 app.use(require('./routes'));

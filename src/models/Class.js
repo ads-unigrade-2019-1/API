@@ -4,7 +4,7 @@ const teacher = require('./Teacher');
 const discipline = require('./Discipline');
 
 
-const ClassSchema = mongoose.Schema({
+const ClassSchema = new mongoose.Schema({
     name : String,
     vacancy : Number,
     teachers : [{ type: mongoose.Schema.Types.ObjectId, ref: 'teacher' }],
