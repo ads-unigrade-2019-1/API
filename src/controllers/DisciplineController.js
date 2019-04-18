@@ -8,7 +8,7 @@ module.exports = {
     },
 
     async create(req, res){
-        const discipline = await discipline.create(req.body);
+        const discipline = await Discipline.create(req.body);
 
         return res.json(discipline); 
     },
