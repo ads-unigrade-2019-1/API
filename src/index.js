@@ -1,9 +1,10 @@
 const express = require('express')
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 const app = express()
 
-mongoose.connect('mongodb+srv://unigrade:unigrade@cluster0-c4e9y.mongodb.net/test?retryWrites=true', {
+mongoose.connect(process.env.DATABASE_URL, {
     useNewUrlParser : true 
 });
 
