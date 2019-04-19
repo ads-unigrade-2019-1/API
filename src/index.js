@@ -1,11 +1,12 @@
 const express = require('express')
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 const app = express()
 
-// mongoose.connect('mongodb+srv://goweek:goweek123@cluster0-nnsd9.mongodb.net/test?retryWrites=true', {
-//     useNewUrlParser : true 
-// });
+mongoose.connect(process.env.DATABASE_URL, {
+    useNewUrlParser : true 
+});
 
 app.use(express.json());
 app.use(require('./routes'));

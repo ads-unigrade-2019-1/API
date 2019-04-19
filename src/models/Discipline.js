@@ -5,7 +5,7 @@ const course = require('./Course');
 const teacher = require('./Teacher');
 
 
-const DisciplineSchema = mongoose.Schema({
+const DisciplineSchema = new mongoose.Schema({
     name : String,
     department : String,
     credits : Number,
