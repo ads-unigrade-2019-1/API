@@ -16,3 +16,17 @@ Repositório contendo a API do projeto. Para mais informações acesse o reopsit
 | Guilherme Guy de Andrade      | 16/0123186 | [guilherme1guy](https://github.com/guilherme1guy)      | guilhermeguy349@gmail.com            |
 | Joberth Rogers Tavares Costa  | 16/0128013 | [joberthrogers18](https://github.com/joberthrogers18)    | joberth.rogers18@gmail.com           |
 | Rafael Contessotto Bragança Pinheiro  | 10/0120181 | [rafaelbrg](https://github.com/rafaelbrg)    | rabragancaunb@gmail.com           |
+
+
+# Para executar
+
+##  necessario:
+
+    docker
+    docker-compose
+
+### 1) 
+        Criar o arquivo .env para setar as variaveis de ambiente no diretório raiz
+### 2)
+        executar o comando "sudo docker-compose up"
+
