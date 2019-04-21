@@ -10,6 +10,13 @@ module.exports = {
     async createClass(req, res){
         const class_body = await Class.create(req.body);
 
+
+        return res.json(class_body);
+    },
+    async getClassByID(req, res){
+
+        const class_body = await Class.findById(req.params.id);
+        
         return res.json(class_body);
     },
 

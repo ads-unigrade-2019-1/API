@@ -14,6 +14,8 @@ routes.post('/discipline', DisciplineController.create);
 
 routes.get('/classes', ClassController.getClasses);
 routes.post('/class', ClassController.createClass);
+routes.get('/class/:id', ClassController.getClassByID);
+
 
 routes.get('/courses', CourseController.getCourses);
 routes.post('/course', CourseController.createCourse);
