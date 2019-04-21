@@ -14,11 +14,12 @@ routes.post('/discipline', DisciplineController.create);
 
 routes.get('/classes', ClassController.getClasses);
 routes.post('/class', ClassController.createClass);
-routes.get('/class/:id', ClassController.getClassByID);
+routes.get('/class/:id', ClassController.getClassById);
 
 
 routes.get('/courses', CourseController.getCourses);
 routes.post('/course', CourseController.createCourse);
+routes.get('/course/:id', CourseController.getCourseById);
 
 routes.get('/teachers', TeacherController.getTeachers);
 routes.get('/teacher', TeacherController.createTeacher);

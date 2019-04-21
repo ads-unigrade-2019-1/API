@@ -13,7 +13,7 @@ module.exports = {
 
         return res.json(class_body);
     },
-    async getClassByID(req, res){
+    async getClassById(req, res){
 
         const class_body = await Class.findById(req.params.id);
         

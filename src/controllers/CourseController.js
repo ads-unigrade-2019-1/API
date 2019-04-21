@@ -13,4 +13,10 @@ module.exports = {
 
         return res.json(course); 
     },
+
+    async getCourseById(req, res){
+        const course = await Course.findById(req.params.id);
+
+        return res.json(course);
+    }
 }
