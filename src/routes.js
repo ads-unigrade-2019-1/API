@@ -24,5 +24,7 @@ routes.get('/course/:id', CourseController.getCourseById);
 
 routes.get('/teachers', TeacherController.getTeachers);
 routes.get('/teacher', TeacherController.createTeacher);
+routes.get('/teacher/:id', TeacherController.getTeacherById);
+
 
 module.exports = routes; 

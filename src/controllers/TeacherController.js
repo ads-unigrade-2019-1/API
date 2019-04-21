@@ -12,4 +12,10 @@ module.exports = {
 
         return res.json(teacher);
     },
+
+    async getTeacherById(req, res){
+        const teacher = await Teacher.findById(req.params.id);
+
+        return res.json(teacher);
+    }
 }
