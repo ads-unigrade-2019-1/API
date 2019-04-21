@@ -11,6 +11,7 @@ const TeacherController = require('./controllers/TeacherController');
 routes.get('/', DisciplineController.hello);
 routes.get('/disciplines', DisciplineController.index);
 routes.post('/discipline', DisciplineController.create);
+routes.get('/discipline/:id', DisciplineController.getDisciplineById);
 
 routes.get('/classes', ClassController.getClasses);
 routes.post('/class', ClassController.createClass);

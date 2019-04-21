@@ -15,5 +15,11 @@ module.exports = {
 
     async hello(req, res){
         res.send('Hello World!');
-    }
+    },
+
+    async getDisciplineById(req, res){
+        const discipline = await Discipline.findById(req.params.id);
+
+        return res.json(discipline);
+    },
 }
