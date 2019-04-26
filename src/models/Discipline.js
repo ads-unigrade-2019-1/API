@@ -6,9 +6,10 @@ const teacher = require('./Teacher');
 
 
 const DisciplineSchema = new mongoose.Schema({
+
     name : String,
     department : String,
-    credits : Number,
+    credits : String,
     category : String,
     classes : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Class' }],
     requirements : [{type: mongoose.Schema.Types.ObjectId, ref: 'discipline', required: false}],
