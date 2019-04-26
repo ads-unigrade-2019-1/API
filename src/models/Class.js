@@ -6,14 +6,16 @@ const discipline = require('./Discipline');
 
 const ClassSchema = new mongoose.Schema({
     name : String,
-    vacancy : Number,
-    teachers : [{ type: mongoose.Schema.Types.ObjectId, ref: 'teacher' }],
+    vacancies : Number,
+    teachers : [String],
     meetings : [{
-        classroom : String,
+        room : String,
         day : String,
-        time : String,
+        init_hour : String,
+        final_hour : String
     }],
-    discipline : { type: mongoose.Schema.Types.ObjectId, ref: 'discipline', required: true }
+    discipline : [String],
+    shift : String,
     
 });
 
