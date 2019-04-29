@@ -1,8 +1,5 @@
 const mongoose = require('mongoose');
 
-const discipline = require('./Discipline');
-
-
 const CourseSchema = new mongoose.Schema({
     code : String, 
     campus : Number,
