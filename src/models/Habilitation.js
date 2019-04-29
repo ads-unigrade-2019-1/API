@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const HabilitationSchema = new mongoos.Schema({
+const HabilitationSchema = new mongoose.Schema({
     code : Number,
     name : String,
     disciplines : [[String]]

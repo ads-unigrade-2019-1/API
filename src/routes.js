@@ -5,7 +5,7 @@ const routes = express.Router();
 const DisciplineController = require('./controllers/DisciplineController');
 const ClassController = require('./controllers/ClassController');
 const CourseController = require('./controllers/CourseController');
-const TeacherController = require('./controllers/TeacherController');
+const HabilitationController = require('./controllers/HabilitationController');
 
 
 routes.get('/', DisciplineController.hello);
@@ -22,9 +22,9 @@ routes.get('/courses', CourseController.getCourses);
 routes.post('/course', CourseController.createCourse);
 routes.get('/course/:id', CourseController.getCourseById);
 
-routes.get('/teachers', TeacherController.getTeachers);
-routes.get('/teacher', TeacherController.createTeacher);
-routes.get('/teacher/:id', TeacherController.getTeacherById);
+routes.get('/habilitations', HabilitationController.getHabilitations);
+routes.post('/habilitation', HabilitationController.createHabilitation);
+routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
 
 
 module.exports = routes; 
