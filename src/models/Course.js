@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
-const discipline = require('./Discipline');
-
-
 const CourseSchema = new mongoose.Schema({
+    code : String, 
+    campus : Number,
     name : String,
-    campus : String,
-    disciplines : [{type: mongoose.Schema.Types.ObjectId, ref: 'discipline', required: true}]
+    shift : String, 
+    modality : String, 
+    habilitations : [Number],
 });
 
 const Course = module.exports = mongoose.model('Course', CourseSchema);
