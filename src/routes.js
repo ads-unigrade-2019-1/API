@@ -6,7 +6,7 @@ const DisciplineController = require('./controllers/DisciplineController');
 const ClassController = require('./controllers/ClassController');
 const CourseController = require('./controllers/CourseController');
 const HabilitationController = require('./controllers/HabilitationController');
-
+const SearchController = require('./controllers/SearchController');
 
 routes.get('/', DisciplineController.hello);
 routes.get('/disciplines', DisciplineController.index);
@@ -26,5 +26,6 @@ routes.get('/habilitations', HabilitationController.getHabilitations);
 routes.post('/habilitation', HabilitationController.createHabilitation);
 routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
 
+routes.post('/search', SearchController.getFilterSearch);
 
 module.exports = routes; 
