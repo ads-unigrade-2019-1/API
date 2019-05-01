@@ -1,6 +1,16 @@
 const Disciplines = require('../models/Discipline')
 const Classes = require('../models/Class');
 
+function getUnique(arr, index) {
+
+    const unique = arr
+        .map(elem => elem[index])
+        .map((elem, indexInside, final) => final.indexOf(elem) === indexInside && indexInside)
+        .filter(elem => arr[elem]).map(elem => arr[elem]);
+  
+     return unique;
+}
+
 module.exports = {
 
     async getFilterSearch(req, res) {
@@ -12,13 +22,14 @@ module.exports = {
                 { 'name': new RegExp(filterSearch, "i") },
                 { 'code': new RegExp(filterSearch, "i") }
             ]
-        }).then(disciplines => {
+        }).then(async disciplines => {
 
-            if (disciplines.length !== 0) {
-                res.json(disciplines);
+            if (disciplines.length !== 0){
+                return res.json(disciplines);
             }
-
-            disciplines_teachers = Classes.find({ 'teachers': new RegExp(filterSearch, "i") })
+    
+            
+            disciplines_teachers = await Classes.find({ 'teachers': new RegExp(filterSearch, "i") })
                 .then(async teacher_disciplines => {
 
                     var disciplinesFromTeacher = [];
@@ -36,7 +47,9 @@ module.exports = {
                         disciplinesFromTeacher.push(gotDiscipline);
                     }
 
-                    res.json(disciplinesFromTeacher);
+                    var setDisciplines = getUnique(disciplinesFromTeacher, 'code')
+
+                    return res.json(setDisciplines);
 
 
                 }).catch(error => {
