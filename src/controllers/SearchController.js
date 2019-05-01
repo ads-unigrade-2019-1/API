@@ -3,7 +3,7 @@ const Classes = require('../models/Class');
 
 module.exports = {
 
-    getFilterSearch(req, res) {
+    async getFilterSearch(req, res) {
 
         const filterSearch = req.body.search;
 
@@ -19,8 +19,26 @@ module.exports = {
             }
 
             disciplines_teachers = Classes.find({ 'teachers': new RegExp(filterSearch, "i") })
-                .then(teacher_disciplines => {
-                    res.json(teacher_disciplines);
+                .then(async teacher_disciplines => {
+
+                    var disciplinesFromTeacher = [];
+
+                    for (discipline of teacher_disciplines) {
+
+                        var gotDiscipline = await Disciplines.findOne({ 'code': discipline.discipline[0] })
+                            .then(currentDiscipline => {
+                                return currentDiscipline;
+                            })
+                            .catch(error => {
+                                res.json({ 'error': `Não foi possível fazer a pesquisa: ${error}` });
+                            })
+
+                        disciplinesFromTeacher.push(gotDiscipline);
+                    }
+
+                    res.json(disciplinesFromTeacher);
+
+
                 }).catch(error => {
                     res.json({ 'error': `Não foi possível fazer a pesquisa: ${error}` });
                 });
@@ -29,5 +47,5 @@ module.exports = {
             res.json({ 'error': `Não foi possível fazer a pesquisa: ${error}` });
         })
     }
-    
+
 }
