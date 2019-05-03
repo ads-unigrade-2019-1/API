@@ -20,4 +20,11 @@ module.exports = {
         return res.json(class_body);
     },
 
+    async getClassesOfDiscipline(req, res){
+        
+        const classes = await Class.find({"discipline": req.query.code});
+
+        return res.json(classes);
+    },
+
 }

@@ -13,9 +13,11 @@ routes.get('/disciplines', DisciplineController.index);
 routes.post('/discipline', DisciplineController.create);
 routes.get('/discipline/:id', DisciplineController.getDisciplineById);
 
+
 routes.get('/classes', ClassController.getClasses);
 routes.post('/class', ClassController.createClass);
 routes.get('/class/:id', ClassController.getClassById);
+routes.get('/discipline', ClassController.getClassesOfDiscipline);
 
 
 routes.get('/courses', CourseController.getCourses);
@@ -25,6 +27,8 @@ routes.get('/course/:id', CourseController.getCourseById);
 routes.get('/habilitations', HabilitationController.getHabilitations);
 routes.post('/habilitation', HabilitationController.createHabilitation);
 routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
+
+
 
 
 module.exports = routes; 
