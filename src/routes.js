@@ -13,6 +13,8 @@ routes.get('/disciplines', DisciplineController.index);
 routes.post('/discipline', DisciplineController.create);
 //routes.get('/discipline/:id', DisciplineController.getDisciplineById);
 routes.get('/discipline/:code', ClassController.getClassesOfDiscipline);
+routes.get('/discipline/:code/:name', ClassController.getClassesOfespecificDiscipline);
+
 
 
 routes.get('/classes', ClassController.getClasses);
