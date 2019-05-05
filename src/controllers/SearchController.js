@@ -12,6 +12,7 @@ function getUnique(arr, index) {
 }
 
 function make_pattern(search_string) {
+
     // escape meta characters
     search_string = search_string.replace(/([|()[{.+*?^$\\])/g,"\\$1");
 
@@ -70,6 +71,10 @@ module.exports = {
 
     async getFilterSearch(req, res) {
 
+        if (req.body.search == null){
+            return res.json({ 'error': '400 - Bad Request'})
+        }
+
         const filterSearch = make_pattern(req.body.search);
 
         Disciplines.find({
@@ -95,7 +100,7 @@ module.exports = {
                                 return currentDiscipline;
                             })
                             .catch(error => {
-                                res.json({ 'error': `Não foi possível fazer a pesquisa: ${error}` });
+                                res.json({ 'error': `Unable to do search: ${error}` });
                             })
 
                         disciplinesFromTeacher.push(gotDiscipline);
@@ -107,11 +112,11 @@ module.exports = {
 
 
                 }).catch(error => {
-                    res.json({ 'error': `Não foi possível fazer a pesquisa: ${error}` });
+                    res.json({ 'error': `Unable to do search: ${error}` });
                 });
 
         }).catch(error => {
-            res.json({ 'error': `Não foi possível fazer a pesquisa: ${error}` });
+            res.json({ 'error': `Unable to do search: ${error}` });
         })
     }
 
