@@ -11,13 +11,13 @@ const HabilitationController = require('./controllers/HabilitationController');
 routes.get('/', DisciplineController.hello);
 routes.get('/disciplines', DisciplineController.index);
 routes.post('/discipline', DisciplineController.create);
-routes.get('/discipline/:id', DisciplineController.getDisciplineById);
+//routes.get('/discipline/:id', DisciplineController.getDisciplineById);
+routes.get('/discipline/:code', ClassController.getClassesOfDiscipline);
 
 
 routes.get('/classes', ClassController.getClasses);
 routes.post('/class', ClassController.createClass);
 routes.get('/class/:id', ClassController.getClassById);
-routes.get('/discipline', ClassController.getClassesOfDiscipline);
 
 
 routes.get('/courses', CourseController.getCourses);
