@@ -12,14 +12,15 @@ routes.get('/', DisciplineController.hello);
 routes.get('/disciplines', DisciplineController.index);
 routes.post('/discipline', DisciplineController.create);
 //routes.get('/discipline/:id', DisciplineController.getDisciplineById);
-routes.get('/discipline/:code', ClassController.getClassesOfDiscipline);
-routes.get('/discipline/:code/:name', ClassController.getClassesOfespecificDiscipline);
+routes.get('/classes/:code', ClassController.getClassesOfDiscipline);
+routes.get('/classes/:code/:name', ClassController.getClassesOfespecificDiscipline);
+routes.get('/discipline/:code', DisciplineController.getCreditsOfDiscipline);
 
 
 
 routes.get('/classes', ClassController.getClasses);
 routes.post('/class', ClassController.createClass);
-routes.get('/class/:id', ClassController.getClassById);
+//routes.get('/class/:id', ClassController.getClassById);
 
 
 routes.get('/courses', CourseController.getCourses);
