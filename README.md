@@ -28,5 +28,5 @@ Repositório contendo a API do projeto. Para mais informações acesse o reopsit
 ### 1) 
         Criar o arquivo .env para setar as variaveis de ambiente no diretório raiz
 ### 2)
-        executar o comando "sudo docker-compose up"
+        executar o comando "sudo docker-compose up --build"
 
