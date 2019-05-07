@@ -1,5 +1,7 @@
 FROM node:latest
 
+ARG PORT=3000
+
 WORKDIR /usr/app
 
 COPY package*.json ./
@@ -8,4 +10,6 @@ RUN yarn install -y && npm install -y
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE $PORT
+
+CMD yarn start
