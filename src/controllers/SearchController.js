@@ -1,4 +1,4 @@
-const Disciplines = require('../models/Discipline')
+const Disciplines = require('../models/Discipline');
 const Classes = require('../models/Class');
 
 function getUnique(arr, index) {
@@ -28,7 +28,8 @@ function make_pattern(search_string) {
     // replace characters by their compositors
     let accent_replacer = function(chr) {
         return accented[chr.toUpperCase()] || chr;
-    }
+    };
+
     for (let i = 0; i < words.length; i++) {
         words[i] = words[i].replace(/\S/g,accent_replacer);
     }
@@ -72,10 +73,14 @@ module.exports = {
     async getFilterSearch(req, res) {
 
         if (req.body.search == null){
-            return res.json({ 'error': '400 - Bad Request'})
+            return res.json({ 'error': '400 - Bad Request'});
         }
 
         const filterSearch = make_pattern(req.body.search);
+
+        let callback_error = function(error) {
+            res.json({ 'error': `Unable to do search: ${error}` });
+        };
 
         Disciplines.find({
             $or: [
@@ -88,36 +93,30 @@ module.exports = {
                 return res.json(disciplines);
             }
 
-            disciplines_teachers = await Classes.find({ 'teachers': new RegExp(req.body.search, "i") })
+            await Classes.find({ 'teachers': new RegExp(req.body.search, "i") })
                 .then(async teacher_disciplines => {
 
                     let disciplinesFromTeacher = [];
 
-                    for (discipline of teacher_disciplines) {
+                    for (let discipline of teacher_disciplines) {
 
                         let gotDiscipline = await Disciplines.findOne({ 'code': discipline.discipline[0] })
                             .then(currentDiscipline => {
                                 return currentDiscipline;
                             })
-                            .catch(error => {
-                                res.json({ 'error': `Unable to do search: ${error}` });
-                            })
+                            .catch(callback_error);
 
                         disciplinesFromTeacher.push(gotDiscipline);
                     }
 
-                    let setDisciplines = getUnique(disciplinesFromTeacher, 'code')
+                    let setDisciplines = getUnique(disciplinesFromTeacher, 'code');
 
                     return res.json(setDisciplines);
 
 
-                }).catch(error => {
-                    res.json({ 'error': `Unable to do search: ${error}` });
-                });
+                }).catch(callback_error);
 
-        }).catch(error => {
-            res.json({ 'error': `Unable to do search: ${error}` });
-        })
+        }).catch(callback_error);
     }
 
-}
+};
