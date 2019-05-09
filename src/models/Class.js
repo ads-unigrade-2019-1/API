@@ -10,7 +10,7 @@ const ClassSchema = new mongoose.Schema({
         init_hour : String,
         final_hour : String
     }],
-    discipline : [String],
+    discipline : String,
     shift : String,
     campus : Number,
     
