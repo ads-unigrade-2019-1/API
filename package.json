@@ -8,9 +8,15 @@
     "mongoose": "^5.4.11"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10"
+    "eslint": "^5.16.0",
+    "nodemon": "^1.18.10",
+    "pre-commit": "^1.2.2"
   },
   "scripts": {
-    "start": "nodemon src/index.js"
-  }
+    "start": "nodemon src/index.js",
+    "lint": "eslint ."
+  },
+  "pre-commit": [
+    "lint"
+  ]
 }

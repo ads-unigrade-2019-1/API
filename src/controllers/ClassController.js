@@ -32,7 +32,7 @@ module.exports = {
         
         const classes = await Class.find({"discipline": req.params.code, "name": req.params.name});
 
-        return res.json(classes)
+        return res.json(classes);
     },
 
-}
+};
