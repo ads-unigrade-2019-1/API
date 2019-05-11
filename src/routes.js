@@ -7,6 +7,7 @@ const ClassController = require('./controllers/ClassController');
 const CourseController = require('./controllers/CourseController');
 const HabilitationController = require('./controllers/HabilitationController');
 const SearchController = require('./controllers/SearchController');
+const TimetableController = require('./controllers/TimetableController')
 
 routes.get('/', DisciplineController.hello);
 routes.get('/disciplines', DisciplineController.index);
@@ -32,6 +33,7 @@ routes.post('/habilitation', HabilitationController.createHabilitation);
 routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
 
 routes.post('/search', SearchController.getFilterSearch);
+routes.get('/timetable', TimetableController.mountTimetable);
 
 
 
