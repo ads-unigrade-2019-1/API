@@ -33,7 +33,7 @@ routes.post('/habilitation', HabilitationController.createHabilitation);
 routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
 
 routes.post('/search', SearchController.getFilterSearch);
-routes.get('/timetable', TimetableController.mountTimetable);
+routes.post('/timetable', TimetableController.mountTimetable);
 
 
 
