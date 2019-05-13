@@ -1,3 +1,5 @@
+const Classes = require('../models/Class');
+
 const object = `[
                 {"name" : "A", "vacancies" : 2, "discipline" : "203882", "meetings" : [ { "day" : "Segunda", "init_hour" : "08:00", "final_hour" : "09:50", "room" : "FGA-LAB MOCAP" }, { "day" : "Sexta", "init_hour" : "08:00", "final_hour" : "09:50", "room" : "FGA-LAB MOCAP" } ], "shift" : "Diurno", "teachers" : [ "MILENE SERRANO" ], "campus" : 4, "priority": 5}, 
                 {"name" : "A", "vacancies" : 38, "discipline" : "130508", "meetings" : [ { "day" : "Segunda", "init_hour" : "10:00", "final_hour" : "11:50", "room" : "FGA-LAB MOCAP" }, { "day" : "Sexta", "init_hour" : "10:00", "final_hour" : "11:50", "room" : "FGA-LAB MOCAP" } ], "shift" : "Diurno", "teachers" : [ "MAURICIO SERRANO" ], "campus" : 4,  "priority": 2 },
@@ -72,20 +74,130 @@ const timetableDefault = [
 
 ]
 
-function parseObjects(timetableJson) {
+function compareClassesPriority(classA, classB){
+    // returns 1 if classA > classB
+    // returns -1 if classA < classB  
 
-    console.log(timetableDefault.length)
+    // this approach lets us change more easily the comparsion
+    // between two classes 
+    if (classA.priority > classB.priority){
+        return 1;
+    }
 
-    let timetableObject = JSON.parse(timetableJson)
-    timetableObject.sort((classA, classB) => (classA.priority > classB.priority) ? 1 : -1)
+    return -1
+}
 
-    return timetableObject
+function classValue(c){
+    // returns a numerical value (5 to 1) for a class
+    
+    // since priority is a value from 1 to 5, with 1 beeing the higher
+    // priority, we will subtract the actual value from the maximum + 1
+    // value make it in a ascending order
+    let result = 6 - c.priority;
+    return result.clamp(1, 5);
+}
+
+function classesValueSum(cList){
+    // returns the total value for a list of classes
+
+    let value = 0;
+
+    cList.forEach(element => {
+        value += classValue(element)
+    });
+    
+    return value;
+}
+
+function parseSelectedClasses(classesJson) {
+
+    // convert json to a list of classes indicators
+    // each element of this list is equal to a Class object
+    // containing: name, code, discipline (code), meetings (list)
+    let selectedClasses = JSON.parse(classesJson);
+    
+    selectedClasses.sort(compareClassesPriority);
+
+    return selectedClasses;
+}
+
+function meetingOverlap(meetingA, meetingB) {
+    // returns true if meetingA and meetingB occours at
+    // the same time
+
+    // a meeting is:
+    // {
+    //     room : String,
+    //     day : String,
+    //     init_hour : String,
+    //     final_hour : String
+    // }
+
+    // removing simpler case first
+    if (meetingA.day != meetingB.day) return false;
+
+    // now analyze by start time
+    // if the start time of X is between the start time and end time of Y
+    // the occour at the same time
+    function stringToDate(str){
+        let times = str.split(":");
+
+        // some date values are predefined, so we can avoid
+        // edge cases (like one date beeing processed 23:59h
+        // and the next on the other day at 00:00h)
+        return new Date(1997, 12, 3, times[0], times[1], 0, 0);
+    }
+
+    function convertStringToHourNumber(meeting){
+        // returns a list with date objects representing the meetings
+
+        let init_hour = stringToDate(meeting.init_hour);
+        let final_hour = stringToDate(meeting.final_hour);
+
+        return [init_hour, final_hour];
+    }
+    
+    function byStartTime(X, Y){
+        const INIT_HOUR = 0;
+        const FINAL_HOUR = 1;
+
+        return Y[INIT_HOUR] <= X[INIT_HOUR] <= Y[FINAL_HOUR]; 
+    }
+    
+    let hoursA = convertStringToHourNumber(meetingA);
+    let hoursB = convertStringToHourNumber(meetingB);
+
+    if (byStartTime(hoursA, hoursB)) return true;
+
+    return false;
+    
+
+}
+
+function isClassCompatible(classA, classB) {
+    // returns  true if classA is compatible with classB
+
+    classA.meetings.forEach(element => {
+        classB.meetings.forEach(elementB => {
+            let result = meetingOverlap(element, elementB);
+            if (result) return false;
+        });
+    });
+
+    return true;
 }
 
 module.exports = {
     mountTimetable(req, res) {
-        parseObjects(object)
 
-        res.json(timetableDefault)
+        // convert JSON from request to list o classes that will be fed to
+        // the algoriithm
+        let selectedClasses = parseSelectedClasses(object);
+
+
+        // mock resposnse
+        let result = timetableDefault;
+
+        res.json(result);
     }
 }
