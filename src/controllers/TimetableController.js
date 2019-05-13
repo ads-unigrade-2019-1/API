@@ -114,8 +114,8 @@ function parseSelectedClasses(classesJson) {
     // convert json to a list of classes indicators
     // each element of this list is equal to a Class object
     // containing: name, code, discipline (code), meetings (list)
-    let selectedClasses = JSON.parse(classesJson);
-    
+    let selectedClasses = classesJson;
+
     selectedClasses.sort(compareClassesPriority);
 
     return selectedClasses;
@@ -134,7 +134,7 @@ function meetingOverlap(meetingA, meetingB) {
     // }
 
     // removing simpler case first
-    if (meetingA.day != meetingB.day) return false;
+    if (meetingA.day.localeCompare(meetingB.day) != 0) return false;
 
     // now analyze by start time
     // if the start time of X is between the start time and end time of Y
@@ -161,28 +161,39 @@ function meetingOverlap(meetingA, meetingB) {
         const INIT_HOUR = 0;
         const FINAL_HOUR = 1;
 
-        return Y[INIT_HOUR] <= X[INIT_HOUR] <= Y[FINAL_HOUR]; 
+        return Y[INIT_HOUR] <= X[INIT_HOUR] && X[INIT_HOUR] <= Y[FINAL_HOUR];
     }
     
     let hoursA = convertStringToHourNumber(meetingA);
     let hoursB = convertStringToHourNumber(meetingB);
 
-    if (byStartTime(hoursA, hoursB)) return true;
+    if (byStartTime(hoursA, hoursB) || byStartTime(hoursB, hoursA)) return true;
 
     return false;
-    
-
 }
 
-function isClassCompatible(classA, classB) {
+function isClassesCompatible(classA, classB) {
     // returns  true if classA is compatible with classB
+    
+    if (classA.discipline.localeCompare(classB.discipline) == 0) return false;
 
-    classA.meetings.forEach(element => {
-        classB.meetings.forEach(elementB => {
-            let result = meetingOverlap(element, elementB);
-            if (result) return false;
-        });
-    });
+    for (const elementA of classA.meetings) {
+        for (const elementB of classB.meetings) {
+            let overlap = meetingOverlap(elementA, elementB);
+            
+            if (overlap) return false;
+        }
+    }
+
+    return true;
+}
+
+function isClassCompatibleWithTimeTable(timeTable, c) {
+    // return true if a class is compatible with a timetable
+
+    for (const element of timeTable) {
+        if (isClassesCompatible(element, c) == false) return false;
+    }
 
     return true;
 }
@@ -192,12 +203,32 @@ module.exports = {
 
         // convert JSON from request to list o classes that will be fed to
         // the algoriithm
-        let selectedClasses = parseSelectedClasses(object);
+        let selectedClasses = parseSelectedClasses(req.body);
 
+        let createdTimeTables = [[], ];
 
-        // mock resposnse
-        let result = timetableDefault;
+        // greedy implementation for testing
+        for (const c of selectedClasses) {
+            
+            let picked = false;
 
-        res.json(result);
+            for (let i = 0; i < createdTimeTables.length; i++) {
+                let timeTable = createdTimeTables[i];
+            
+                if(isClassCompatibleWithTimeTable(timeTable, c)){
+                    picked = true;
+
+                    timeTable.push(c);
+                }
+
+            }
+
+            if (picked == false){
+                let timeTable = [c, ];
+                createdTimeTables.push(timeTable);
+            }            
+        }
+
+        res.json(createdTimeTables);
     }
 }
