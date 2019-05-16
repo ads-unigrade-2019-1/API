@@ -1,6 +1,7 @@
 const Classes = require('../models/Class');
 const TimeTable = require('../algorithm/TimeTable');
 const GeneticAlgorithm = require('../algorithm/GeneticAlgorithm');
+const CompatibilityRestriction = require('../algorithm/Restrictions/CompatibilityRestriction')
 
 function compareClassesPriority(classA, classB){
     // returns 1 if classA > classB
@@ -51,12 +52,40 @@ function parseSelectedClasses(classesJson) {
 
 function parseTimeTables(timeTables){
 
-    return parseTimeTables.map(element => {
+    return timeTables.map(element => {
         return element.classes
     });
 
 }
 
+function greedy(selectedClasses){
+    
+    let createdTimeTables = [new TimeTable([]), ];
+
+    // greedy implementation for testing
+    for (const c of selectedClasses) {
+        
+        let picked = false;
+
+        for (let i = 0; i < createdTimeTables.length; i++) {
+            let timeTable = createdTimeTables[i];
+        
+            picked = timeTable.append(c);
+        }
+
+        if (picked == false){
+            let timeTable = new TimeTable([c, ]);
+            createdTimeTables.push(timeTable);
+        }            
+    }
+
+    return createdTimeTables;
+}
+
+const defaultRestrictions = [
+    new CompatibilityRestriction(),
+
+]
 
 module.exports = {
     mountTimetable(req, res) {
@@ -64,31 +93,17 @@ module.exports = {
         // convert JSON from request to list o classes that will be fed to
         // the algoriithm
         let selectedClasses = parseSelectedClasses(req.body);
+        
+        let geneticAlg = new GeneticAlgorithm(
+            defaultRestrictions,
+            selectedClasses,
+            30,
+            20    
+        );
 
-        let createdTimeTables = [new TimeTable([]), ];
-
-        // greedy implementation for testing
-        for (const c of selectedClasses) {
-            
-            let picked = false;
-
-            for (let i = 0; i < createdTimeTables.length; i++) {
-                let timeTable = createdTimeTables[i];
-            
-                if(timeTable.canInsert(c)){
-                    picked = true;
-
-                    timeTable.append(c);
-                }
-
-            }
-
-            if (picked == false){
-                let timeTable = new TimeTable([c, ]);
-                createdTimeTables.push(timeTable);
-            }            
-        }
-
-        res.json(parseTimeTables(createdTimeTables));
+        // res.json(parseTimeTables(greedy(selectedClasses)));
+        res.json(parseTimeTables(
+            geneticAlg.run()
+        ));
     }
 }

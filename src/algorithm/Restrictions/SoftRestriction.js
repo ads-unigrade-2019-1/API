@@ -1,5 +1,5 @@
 "use strict"
-const Restriction = require("../Restrictions/Restriction")
+const Restriction = require("./Restriction")
 
 class SoftRestriction extends Restriction{
 

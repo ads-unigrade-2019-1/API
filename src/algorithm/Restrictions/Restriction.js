@@ -6,9 +6,12 @@ class Restriction{
         if (this.constructor === Restriction) {
             throw new TypeError('Abstract class "Restriction" cannot be instantiated directly.'); 
         }
-    }
 
-    apply() { }
+        if (this.apply === undefined) {
+            throw new TypeError("Must override 'apply' method");
+        }
+
+    }
     
 }
 

@@ -1,19 +1,22 @@
 "use strict"
+"use static"
 class TimeTable{
 
     constructor(classes){
         
         this.classes = classes;
-
     }
 
     append(c){
+        if(this._canInsert(c)){
+            this.classes.push(c);
+            return true;
+        }
 
-        this.classes.appendClass(c);
-
+        return false;
     }
 
-    meetingOverlap(meetingA, meetingB) {
+    static meetingOverlap(meetingA, meetingB) {
         // returns true if meetingA and meetingB occours at
         // the same time
 
@@ -64,7 +67,7 @@ class TimeTable{
         return false;
     }
 
-    isClassesCompatible(classA, classB) {
+    static isClassesCompatible(classA, classB) {
         // returns  true if classA is compatible with classB
         
         if (classA.discipline.localeCompare(classB.discipline) == 0) return false;
@@ -80,11 +83,24 @@ class TimeTable{
         return true;
     }
 
-    canInsert(c) {
+    isConsistent() {
+        // checks internal consistency of a time table
+
+        let testTable = new TimeTable([]);
+
+        for (const c of this.classes) {
+           
+            if (testTable.append(c) === false) return false;
+        }
+
+        return true;
+    }
+
+    _canInsert(c) {
         // return true if a class is compatible with a timetable
 
         for (const element of this.classes) {
-            if (this.isClassesCompatible(element, c) == false) return false;
+            if (TimeTable.isClassesCompatible(element, c) == false) return false;
         }
 
         return true;
