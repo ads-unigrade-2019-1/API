@@ -1,7 +1,8 @@
 const Classes = require('../models/Class');
 const TimeTable = require('../algorithm/TimeTable');
 const GeneticAlgorithm = require('../algorithm/GeneticAlgorithm');
-const CompatibilityRestriction = require('../algorithm/Restrictions/CompatibilityRestriction')
+const CompatibilityRestriction = require('../algorithm/Restrictions/CompatibilityRestriction');
+const ClassesIncludedRestriction = require('../algorithm/Restrictions/ClassesIncludedRestriction')
 
 function compareClassesPriority(classA, classB){
     // returns 1 if classA > classB
@@ -82,22 +83,24 @@ function greedy(selectedClasses){
     return createdTimeTables;
 }
 
-const defaultRestrictions = [
-    new CompatibilityRestriction(),
-
-]
-
 module.exports = {
     mountTimetable(req, res) {
 
         // convert JSON from request to list o classes that will be fed to
         // the algoriithm
         let selectedClasses = parseSelectedClasses(req.body);
+
         
+        const restrictions = [
+            new CompatibilityRestriction(),
+            new ClassesIncludedRestriction(selectedClasses, 0.45),
+
+        ];
+
         let geneticAlg = new GeneticAlgorithm(
-            defaultRestrictions,
+            restrictions,
             selectedClasses,
-            30,
+            100,
             20    
         );
 
