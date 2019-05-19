@@ -31,9 +31,10 @@ class GeneticAlgorithm{
     _generateInitialPopulation(){
         // returns a list of random TimeTables
     
-        let population = [];
+        // initialize with greedy algotithim
+        let population = GeneticAlgorithm._greedyGeneration(this.classes);
 
-        for (let i = 0; i < this.populationSize; i++) {
+        for (let i = population.length; i < this.populationSize; i++) {
             
             // Shuffle array
             const shuffled = this.classes.sort(() => 0.5 - Math.random());
@@ -45,6 +46,30 @@ class GeneticAlgorithm{
         }
   
         return population;
+    }
+
+    static _greedyGeneration(classes){
+    
+        let createdTimeTables = [new TimeTable([]), ];
+    
+        // greedy implementation for testing
+        for (const c of classes) {
+            
+            let picked = false;
+    
+            for (let i = 0; i < createdTimeTables.length; i++) {
+                let timeTable = createdTimeTables[i];
+            
+                picked = timeTable.append(c);
+            }
+    
+            if (picked == false){
+                let timeTable = new TimeTable([c, ]);
+                createdTimeTables.push(timeTable);
+            }            
+        }
+    
+        return createdTimeTables;
     }
 
     run(){
