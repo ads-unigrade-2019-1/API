@@ -1,5 +1,6 @@
 "use strict"
 const TimeTable = require('./TimeTable');
+const RestrictionComposite = require('./Restrictions/RestrictionComposite');
 
 class GeneticAlgorithm{
 
@@ -14,6 +15,13 @@ class GeneticAlgorithm{
         }
         
         this.restrictions = restrictions;
+
+        this.restrictionsComposite = new RestrictionComposite();
+        for (const restriction of restrictions) {
+
+            this.restrictionsComposite.add(restriction);    
+        }
+        
         this.classes = classes;
         this.populationSize = populationSize;
         this.maxGenerations = maxGenerations;
@@ -139,15 +147,8 @@ class GeneticAlgorithm{
     }
 
     _fitness(timeTable){
-        
-        let penalitiesSum = 0;
 
-        for (const restriction of this.restrictions) {
-            
-            penalitiesSum += restriction.apply(timeTable);
-        }
-        
-        return 100 / (100 + penalitiesSum);
+       return this.restrictionsComposite.apply(timeTable);
     }
 
 }
