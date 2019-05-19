@@ -112,17 +112,23 @@ class GeneticAlgorithm{
             newGeneration.push(selected.pop());
         }
 
-        for (let i = 0; i < selected.length; i += 2) {
-            
-            let parent1 = selected[i];
-            let parent2 = selected[i+1];
+        // shuffle array contents
+        console.log(selected);
+        selected.sort(() => 0.5 - Math.random());
+
+        while (selected.length > 0) {            
+            let parent1 = selected.pop();
+            let parent2 = selected.pop();
 
             // parent1 needs to be the smaller array
-            if (parent1.classes.length > parent2.classes.length) [parent1, parent2] = [parent2, parent1];
+            if (parent1.classes.length > parent2.classes.length) {
+                [parent1, parent2] = [parent2, parent1];
+            }
 
             let childs = this._generateOffspring(parent1, parent2);
             newGeneration.push(childs[0]);
             newGeneration.push(childs[1]);
+
         }
 
         return newGeneration;
@@ -141,7 +147,7 @@ class GeneticAlgorithm{
         // parts[3] = J K L
         // and finally:
         // childs[0] = A B J K L
-        // cuilds[1] = C H I
+        // cuilds[1] = H I C
 
         // parent1 and parent2 are TImeTable objects
 
