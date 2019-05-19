@@ -24,7 +24,7 @@ class ClassesIncludedRestrictions extends SoftRestriction{
 
         let count = ClassesIncludedRestrictions._disciplineCount(timeTable.classes);
 
-        if (count > this.minimalPercentage*this.disciplineAumount) return 0;
+        if (count >= Math.round(this.minimalPercentage*this.disciplineAumount)) return 0;
 
         return this.penality;
     }
