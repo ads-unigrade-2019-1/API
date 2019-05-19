@@ -1,10 +1,11 @@
 "use strict"
 const TimeTable = require('./TimeTable');
 const RestrictionComposite = require('./Restrictions/RestrictionComposite');
+const Prando = require('prando');
 
 class GeneticAlgorithm{
 
-    constructor(restrictions, classes, populationSize, maxGenerations){
+    constructor(restrictions, classes, populationSize, maxGenerations, deterministic = true){
         
         if (classes == null || classes.length < 1){
             throw new RangeError("classes must have at least one element");
@@ -25,6 +26,13 @@ class GeneticAlgorithm{
         this.classes = classes;
         this.populationSize = populationSize;
         this.maxGenerations = maxGenerations;
+
+        if (deterministic){
+            this.generationSeed = 85282812828521851841;
+            this.rng = new Prando(this.generationSeed);
+        }else{
+            this.rng = new Prando();
+        }
     }
 
 
@@ -37,10 +45,10 @@ class GeneticAlgorithm{
         for (let i = population.length; i < this.populationSize; i++) {
             
             // Shuffle array
-            const shuffled = this.classes.sort(() => 0.5 - Math.random());
+            const shuffled = this.classes.sort(() => 0.5 - this.rng.next());
 
             // Get sub-array of first n elements after shuffled
-            let selected = shuffled.slice(0, Math.ceil(Math.random() * this.classes.length + 1));
+            let selected = shuffled.slice(0, this.rng.nextInt(1, shuffled.length));
             
             population.push(new TimeTable(selected));
         }
@@ -85,6 +93,8 @@ class GeneticAlgorithm{
             this.currentPopulation = this._crossover(selected);
         }
         
+        console.log(this.currentPopulation.map((obj) => obj.classes.length));
+
         return this.currentPopulation;
     }
 
@@ -97,7 +107,7 @@ class GeneticAlgorithm{
         let average = sum/avaliation.length;
 
         // apply truncation with the minimal value beeing the average
-        let truncated = avaliation.filter((value) => value[1] >= average);
+        let truncated = avaliation.filter((value) => value[1] >= 0.8*average);
         truncated.sort((a, b) => a[1] > b[1] ? 1 : -1);
         truncated = truncated.map((element) => element[0]);
         
@@ -113,8 +123,7 @@ class GeneticAlgorithm{
         }
 
         // shuffle array contents
-        console.log(selected);
-        selected.sort(() => 0.5 - Math.random());
+        selected.sort(() => 0.5 - this.rng.next());
 
         while (selected.length > 0) {            
             let parent1 = selected.pop();
@@ -151,7 +160,7 @@ class GeneticAlgorithm{
 
         // parent1 and parent2 are TImeTable objects
 
-        let crossoverPoint = Math.round(Math.random() * parent1.classes.length - 1);
+        let crossoverPoint = this.rng.nextInt(0, parent1.classes.length);
         
         let parts = [
             parent1.classes.splice(0, crossoverPoint),
