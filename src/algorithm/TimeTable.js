@@ -2,14 +2,75 @@
 "use static"
 class TimeTable{
 
-    constructor(classes){
+    constructor(classes, selectedClasses){
         
-        this.classes = classes;
+        this._classes = classes;
+        this._chromosome = TimeTable.toChromosome(classes, selectedClasses);
+
+        this._isUpdated = false;
+        this._selectedClasses = [];
+    }
+
+    get classes(){
+        return this._classes;
+    }
+
+    get selectedClasses(){
+        
+        if (this._isUpdated === false){
+            this._selectedClasses = this._fromChromosome(); 
+            this._isUpdated = true;           
+        }
+
+        return this._selectedClasses;
+    }
+
+    setSelectedClasses(classes){
+
+        this.setChromosome(
+            TimeTable.toChromosome(this._classes, classes)
+        );
+    }
+
+    get chromosome(){
+        return this._chromosome;
+    }
+
+    setChromosome(chr){
+        this._chromosome = chr;
+        this._isUpdated = false;
+    }
+
+    _fromChromosome(){
+
+        let selClasses = this._classes.map((obj, index) => {
+            return this._chromosome[index] === true ? obj: null;
+        });
+
+        let x = selClasses.filter((obj) => {return obj != null});
+        return x;
+    }
+
+    static toChromosome(classes, selected){
+
+        return classes.map((obj) => {
+
+            let classIndex = selected.indexOf(obj);
+            
+            if (classIndex >= 0){
+                return true;
+            }
+
+            return false;
+        });
     }
 
     append(c){
         if(this._canInsert(c)){
-            this.classes.push(c);
+            
+            let index = this._classes.indexOf(c);
+            this._chromosome[index] = true;
+            this._isUpdated = false;
             return true;
         }
 
@@ -70,7 +131,7 @@ class TimeTable{
     static isClassesCompatible(classA, classB) {
         // returns  true if classA is compatible with classB
         
-        if (classA.discipline.localeCompare(classB.discipline) == 0) return false;
+        if (classA.discipline.localeCompare(classB.discipline) === 0) return false;
 
         for (const elementA of classA.meetings) {
             for (const elementB of classB.meetings) {
@@ -86,9 +147,9 @@ class TimeTable{
     isConsistent() {
         // checks internal consistency of a time table
 
-        let testTable = new TimeTable([]);
+        let testTable = new TimeTable(this._classes, []);
 
-        for (const c of this.classes) {
+        for (const c of this.selectedClasses) {
            
             if (testTable.append(c) === false) return false;
         }
@@ -99,7 +160,7 @@ class TimeTable{
     _canInsert(c) {
         // return true if a class is compatible with a timetable
 
-        for (const element of this.classes) {
+        for (const element of this.selectedClasses) {
             if (TimeTable.isClassesCompatible(element, c) == false) return false;
         }
 

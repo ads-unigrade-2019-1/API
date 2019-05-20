@@ -54,7 +54,7 @@ function parseSelectedClasses(classesJson) {
 function parseTimeTables(timeTables){
 
     return timeTables.map(element => {
-        return element.classes
+        return element.selectedClasses
     });
 
 }
@@ -93,15 +93,15 @@ module.exports = {
         
         const restrictions = [
             new CompatibilityRestriction(),
-            new ClassesIncludedRestriction(selectedClasses, 0.45),
+            new ClassesIncludedRestriction(0.6),
 
         ];
-
+        
         let geneticAlg = new GeneticAlgorithm(
             restrictions,
             selectedClasses,
-            100,
-            20    
+            150,
+            20
         );
 
         // res.json(parseTimeTables(greedy(selectedClasses)));

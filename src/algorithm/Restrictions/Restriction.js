@@ -8,7 +8,7 @@ class Restriction{
         }
 
         if (this.apply === undefined) {
-            throw new TypeError("Must override 'apply' method");
+            throw new TypeError(this.constructor + " -- Must override 'apply' method");
         }
 
     }

@@ -4,12 +4,10 @@ const SoftRestriction = require("./SoftRestriction")
 
 class ClassesIncludedRestrictions extends SoftRestriction{
 
-    constructor(classes, minimalPercentage){
+    constructor(minimalPercentage){
 
         super();
 
-        this.classes = classes;
-        this.disciplineAumount = ClassesIncludedRestrictions._disciplineCount(classes);
         this.minimalPercentage = minimalPercentage;
     }
 
@@ -22,9 +20,10 @@ class ClassesIncludedRestrictions extends SoftRestriction{
 
     apply(timeTable) {
 
-        let count = ClassesIncludedRestrictions._disciplineCount(timeTable.classes);
+        let count = ClassesIncludedRestrictions._disciplineCount(timeTable.selectedClasses);
+        let minimalValue = ClassesIncludedRestrictions._disciplineCount(timeTable.classes);
 
-        if (count >= Math.round(this.minimalPercentage*this.disciplineAumount)) return 0;
+        if (count >= Math.ceil(this.minimalPercentage*minimalValue)) return 0;
 
         return this.penality;
     }
