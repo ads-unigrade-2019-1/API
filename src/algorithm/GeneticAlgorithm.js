@@ -82,6 +82,39 @@ class GeneticAlgorithm{
     
         return createdTimeTables;
     }
+    
+    get globalAverage(){
+
+        let averagesToConsider = Math.min(this._lastAverages.length, 5);
+            
+        let sum = this._lastAverages
+            .slice(this._lastAverages.length - averagesToConsider, this._lastAverages.length)
+            .reduce((accumulator, current) => {
+                return current + accumulator;
+            }, 0);
+
+        let avg = sum / averagesToConsider;
+        
+        return avg;
+    }
+
+    _cleanResult(population){
+        // order by selectedClasses length
+        population.sort((a, b) => a.selectedClasses.length < b.selectedClasses.length ? 1 : -1);
+        
+        console.log(
+            population.map((obj) => obj.selectedClasses.length)
+        );
+        console.log(
+            population.map((obj) => obj.isConsistent())
+        );
+        
+        // remove inconsistent and duplicated results
+        population = population.filter((obj) => {return obj.isConsistent()});
+        population = this._filterDuplicates(population);
+
+        return population
+    }
 
     run(){
         // returns the list of best timetables after
@@ -94,41 +127,21 @@ class GeneticAlgorithm{
             let avaliation = this._avaliate();
             let selected = this._select(avaliation);
 
-            let averagesToConsider = Math.min(this._lastAverages.length, 5);
-            
-            let sum = this._lastAverages
-                .slice(this._lastAverages.length - averagesToConsider, this._lastAverages.length)
-                .reduce((accumulator, current) => {
-                    return current + accumulator;
-                }, 0);
-
-            let avg = sum / averagesToConsider;
-            
-            if (avg > 0.9){
-                break;
-            }
+           if (this.globalAverage > 0.9) break;
 
             let newPopulation = this._crossover(selected);
             this.currentPopulation = this._mutate(newPopulation);
         }
-        
-        this.currentPopulation.sort((a, b) => a.selectedClasses.length < b.selectedClasses.length ? 1 : -1);
-        
-        console.log(
-            this.currentPopulation.map((obj) => obj.selectedClasses.length)
-        );
-        console.log(
-            this.currentPopulation.map((obj) => obj.isConsistent())
-        );
-        
-        this.currentPopulation = this.currentPopulation.filter((obj) => {return obj.isConsistent()});
-        this.currentPopulation = this._filterDuplicates(this.currentPopulation);
 
-        if (this.currentPopulation.length < 1){
+        let cleanedPopulation = this._cleanResult(this.currentPopulation);
+
+        // fallback to greedy implementation
+        if (cleanedPopulation.length < 1){
             return this._greedyGeneration(this.classes);
         }
 
-        return this.currentPopulation.slice(0, Math.min(5, this.currentPopulation.length));
+        // returns top 5 elements
+        return cleanedPopulation.slice(0, Math.min(5, cleanedPopulation.length));        
     }
 
     _filterDuplicates(population){
