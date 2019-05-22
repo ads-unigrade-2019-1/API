@@ -9,6 +9,8 @@ class TimeTable{
 
         this._isUpdated = false;
         this._selectedClasses = [];
+
+        this._isConsistent = true;
     }
 
     get classes(){
@@ -17,10 +19,7 @@ class TimeTable{
 
     get selectedClasses(){
         
-        if (this._isUpdated === false){
-            this._selectedClasses = this._fromChromosome(); 
-            this._isUpdated = true;           
-        }
+        if (this._isUpdated === false) this._update();
 
         return this._selectedClasses;
     }
@@ -147,11 +146,20 @@ class TimeTable{
     isConsistent() {
         // checks internal consistency of a time table
 
+        if(this._isUpdated == false) this._update();
+        
+        return this._isConsistent;
+    }
+
+    _checkConsistency(){
+
         let testTable = new TimeTable(this._classes, []);
 
         for (const c of this.selectedClasses) {
            
-            if (testTable.append(c) === false) return false;
+            if (testTable.append(c) === false) {
+                return false;
+            }
         }
 
         return true;
@@ -165,6 +173,15 @@ class TimeTable{
         }
 
         return true;
+    }
+
+    _update(){
+        // updates cached properties
+
+        this._isConsistent = this._checkConsistency();
+        this.selectedClasses = this._fromChromosome();
+
+        this._isUpdated = true;
     }
 
 }
