@@ -35,6 +35,8 @@ routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
 routes.post('/search', SearchController.getFilterSearch);
 routes.post('/timetable', TimetableController.mountTimetable);
 
+routes.get('/timetable/r/', TimetableController.randomTimeTable);
+
 
 
 module.exports = routes; 

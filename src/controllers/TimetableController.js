@@ -3,6 +3,7 @@ const TimeTable = require('../algorithm/TimeTable');
 const GeneticAlgorithm = require('../algorithm/GeneticAlgorithm');
 const CompatibilityRestriction = require('../algorithm/Restrictions/CompatibilityRestriction');
 const ClassesIncludedRestriction = require('../algorithm/Restrictions/ClassesIncludedRestriction')
+const Prando = require('prando');
 
 function compareClassesPriority(classA, classB){
     // returns 1 if classA > classB
@@ -108,5 +109,45 @@ module.exports = {
         res.json(parseTimeTables(
             geneticAlg.run()
         ));
+    },
+
+    async randomTimeTable(req, res) {
+        
+        let numbersUser = [];
+        let classes = [];
+
+        function getSafeSeed(seed) {
+            if (seed === 0) return 1;
+            return seed;
+        }
+        const MIN = -2147483648; // Int32 min
+        const MAX = 2147483647; // Int32 max
+        const seed = getSafeSeed(MIN + Math.floor((MAX - MIN) * Math.random()));
+        let rng = new Prando(seed);
+
+        console.log(seed);
+
+        let maxSize = rng.nextInt(3, 15);
+        let count = await Classes.estimatedDocumentCount({});
+       
+        for (let i = 0; i < maxSize; i++) {
+
+            let randomNumber = rng.nextInt(0, count);
+            while (numbersUser.indexOf(randomNumber) != -1) {
+                randomNumber = rng.nextInt(0, count);
+            }        
+            numbersUser.push(randomNumber);
+
+            let c = await Classes.find({}).lean().limit(1).skip(randomNumber);
+            classes.push(c[0]);
+        }
+
+        console.log(classes.map((obj) => {
+            return obj.discipline + "_" + obj.name;
+        }));
+
+        req.body = classes;
+
+        module.exports.mountTimetable(req, res);
     }
 }
