@@ -137,7 +137,7 @@ class GeneticAlgorithm{
 
         // fallback to greedy implementation
         if (cleanedPopulation.length < 1){
-            return this._greedyGeneration(this.classes);
+            return GeneticAlgorithm._greedyGeneration(this.classes);
         }
 
         // returns top 5 elements
