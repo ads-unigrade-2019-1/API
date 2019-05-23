@@ -24,18 +24,16 @@ class TimeTable{
         return this._selectedClasses;
     }
 
-    setSelectedClasses(classes){
+    set selectedClasses(classes){
 
-        this.setChromosome(
-            TimeTable.toChromosome(this._classes, classes)
-        );
+        this.chromosome = TimeTable.toChromosome(this._classes, classes)
     }
 
     get chromosome(){
         return this._chromosome;
     }
 
-    setChromosome(chr){
+    set chromosome(chr){
         this._chromosome = chr;
         this._isUpdated = false;
     }
@@ -155,7 +153,7 @@ class TimeTable{
 
         let testTable = new TimeTable(this._classes, []);
 
-        for (const c of this.selectedClasses) {
+        for (const c of this._fromChromosome()) {
            
             if (testTable.append(c) === false) {
                 return false;
@@ -179,7 +177,7 @@ class TimeTable{
         // updates cached properties
 
         this._isConsistent = this._checkConsistency();
-        this.selectedClasses = this._fromChromosome();
+        this._selectedClasses = this._fromChromosome();
 
         this._isUpdated = true;
     }

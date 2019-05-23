@@ -231,8 +231,8 @@ class GeneticAlgorithm{
             parent2Chromosome
         ];
 
-        parent1.setChromosome(parts[0].concat(parts[3])); 
-        parent2.setChromosome(parts[2].concat(parts[1]));
+        parent1.chromosome = parts[0].concat(parts[3]); 
+        parent2.chromosome = parts[2].concat(parts[1]);
 
         return [parent1, parent2];
     }
