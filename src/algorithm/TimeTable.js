@@ -11,6 +11,8 @@ class TimeTable{
         this._selectedClasses = [];
 
         this._isConsistent = true;
+
+        this._uncompatibilityMap = new Map();
     }
 
     get classes(){
@@ -163,11 +165,55 @@ class TimeTable{
         return true;
     }
 
+    static _strfyClass(c){
+        return c.discipline + "_" + c.name;
+    }
+
+    _appendUncompatibility(a, b){
+        
+        let strfA = TimeTable._strfyClass(a);
+
+        let aList = this._uncompatibilityMap.get(strfA);
+        
+        if (aList == undefined){
+            aList = [b, ];
+        }else{
+            if(aList.indexOf(b) != -1){
+                return;
+            }
+
+            aList.push(b);
+        }
+        
+        this._uncompatibilityMap.set(strfA, aList);
+        this._appendUncompatibility(b, a);   
+    }
+
+    _getUncompatibilities(c) {
+        let result = [];
+        const search = TimeTable._strfyClass(c);
+
+        if(this._uncompatibilityMap.has(search)){
+            result = this._uncompatibilityMap.get(search); 
+        }
+
+        return result;
+    }
+
+
     _canInsert(c) {
-        // return true if a class is compatible with a timetable
+        // return true if a class is compatible with this timetable
 
         for (const element of this.selectedClasses) {
-            if (TimeTable.isClassesCompatible(element, c) == false) return false;
+            
+            if(this._getUncompatibilities(element).indexOf(c) != -1){ 
+                return false;
+            }
+            
+            if (TimeTable.isClassesCompatible(element, c) == false){ 
+                this._appendUncompatibility(element, c);
+                return false;
+            }
         }
 
         return true;
