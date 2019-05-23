@@ -170,8 +170,8 @@ class GeneticAlgorithm{
 
         this._lastAverages.push(average);
 
-        // apply truncation with the minimal value beeing the average
-        let truncated = avaliation.filter((value) => value[1] >= average);
+        // apply truncation with the minimal value beeing 90% of the average
+        let truncated = avaliation.filter((value) => value[1] >= 0.9*average);
         truncated.sort((a, b) => a[1] > b[1] ? 1 : -1);
         truncated = truncated.map((element) => element[0]);
         
