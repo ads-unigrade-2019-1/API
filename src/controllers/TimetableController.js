@@ -2,42 +2,21 @@ const Classes = require('../models/Class');
 const TimeTable = require('../algorithm/TimeTable');
 const GeneticAlgorithm = require('../algorithm/GeneticAlgorithm');
 const CompatibilityRestriction = require('../algorithm/Restrictions/CompatibilityRestriction');
-const ClassesIncludedRestriction = require('../algorithm/Restrictions/ClassesIncludedRestriction')
+const ClassesIncludedRestriction = require('../algorithm/Restrictions/ClassesIncludedRestriction');
+const PriorityRestriction = require('../algorithm/Restrictions/PriorityRestriction');
 const Prando = require('prando');
 
-function compareClassesPriority(classA, classB){
+function compareClassesPriority(classA, classB) {
     // returns 1 if classA > classB
     // returns -1 if classA < classB  
 
     // this approach lets us change more easily the comparsion
     // between two classes 
-    if (classA.priority > classB.priority){
+    if (classA.priority > classB.priority) {
         return 1;
     }
 
     return -1
-}
-
-function classValue(c){
-    // returns a numerical value (5 to 1) for a class
-    
-    // since priority is a value from 1 to 5, with 1 beeing the higher
-    // priority, we will subtract the actual value from the maximum + 1
-    // value make it in a ascending order
-    let result = 6 - c.priority;
-    return result.clamp(1, 5);
-}
-
-function classesValueSum(cList){
-    // returns the total value for a list of classes
-
-    let value = 0;
-
-    cList.forEach(element => {
-        value += classValue(element)
-    });
-    
-    return value;
 }
 
 function parseSelectedClasses(classesJson) {
@@ -52,7 +31,7 @@ function parseSelectedClasses(classesJson) {
     return selectedClasses;
 }
 
-function parseTimeTables(timeTables){
+function parseTimeTables(timeTables) {
 
     return timeTables.map(element => {
         return element.selectedClasses
@@ -60,25 +39,25 @@ function parseTimeTables(timeTables){
 
 }
 
-function greedy(selectedClasses){
-    
-    let createdTimeTables = [new TimeTable([]), ];
+function greedy(selectedClasses) {
+
+    let createdTimeTables = [new TimeTable([]),];
 
     // greedy implementation for testing
     for (const c of selectedClasses) {
-        
+
         let picked = false;
 
         for (let i = 0; i < createdTimeTables.length; i++) {
             let timeTable = createdTimeTables[i];
-        
+
             picked = timeTable.append(c);
         }
 
-        if (picked == false){
-            let timeTable = new TimeTable([c, ]);
+        if (picked == false) {
+            let timeTable = new TimeTable([c,]);
             createdTimeTables.push(timeTable);
-        }            
+        }
     }
 
     return createdTimeTables;
@@ -91,13 +70,12 @@ module.exports = {
         // the algoriithm
         let selectedClasses = parseSelectedClasses(req.body);
 
-        
         const restrictions = [
             new CompatibilityRestriction(),
             new ClassesIncludedRestriction(0.6),
-
+            new PriorityRestriction(0.8),
         ];
-        
+
         let geneticAlg = new GeneticAlgorithm(
             restrictions,
             selectedClasses,
@@ -112,7 +90,7 @@ module.exports = {
     },
 
     async randomTimeTable(req, res) {
-        
+
         let numbersUser = [];
         let classes = [];
 
@@ -129,13 +107,13 @@ module.exports = {
 
         let maxSize = rng.nextInt(3, 15);
         let count = await Classes.estimatedDocumentCount({});
-       
+
         for (let i = 0; i < maxSize; i++) {
 
             let randomNumber = rng.nextInt(0, count);
             while (numbersUser.indexOf(randomNumber) != -1) {
                 randomNumber = rng.nextInt(0, count);
-            }        
+            }
             numbersUser.push(randomNumber);
 
             let c = await Classes.find({}).lean().limit(1).skip(randomNumber);
