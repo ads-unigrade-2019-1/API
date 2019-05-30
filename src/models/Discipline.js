@@ -11,4 +11,4 @@ const DisciplineSchema = new mongoose.Schema({
     requirements : [String],
 });
 
-const Discipline = module.exports = mongoose.model('Discipline', DisciplineSchema);
+module.exports = mongoose.model('Discipline', DisciplineSchema);

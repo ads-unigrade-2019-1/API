@@ -9,4 +9,4 @@ const CourseSchema = new mongoose.Schema({
     habilitations : [Number],
 });
 
-const Course = module.exports = mongoose.model('Course', CourseSchema);
+module.exports = mongoose.model('Course', CourseSchema);

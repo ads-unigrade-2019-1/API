@@ -39,30 +39,6 @@ function parseTimeTables(timeTables) {
 
 }
 
-function greedy(selectedClasses) {
-
-    let createdTimeTables = [new TimeTable([]),];
-
-    // greedy implementation for testing
-    for (const c of selectedClasses) {
-
-        let picked = false;
-
-        for (let i = 0; i < createdTimeTables.length; i++) {
-            let timeTable = createdTimeTables[i];
-
-            picked = timeTable.append(c);
-        }
-
-        if (picked == false) {
-            let timeTable = new TimeTable([c,]);
-            createdTimeTables.push(timeTable);
-        }
-    }
-
-    return createdTimeTables;
-}
-
 module.exports = {
     mountTimetable(req, res) {
 
