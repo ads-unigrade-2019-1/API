@@ -21,8 +21,15 @@ module.exports = {
     },
 
     async getCoursesByCampus(req, res){
-        const course = await Course.find({"campus": req.params.campus});
 
-        return res.json(course);
+        var campus = req.params.campus
+
+        if ( typeof(campus) != 'number' || (campus > 4 || campus < 1)) {
+            return res.status(403).send("Wrong parameter");
+        }
+        
+        const courses = await Course.find({"campus": req.params.campus});
+
+        return res.json(courses);
     }
 };
