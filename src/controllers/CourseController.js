@@ -18,5 +18,11 @@ module.exports = {
         const course = await Course.findById(req.params.id);
 
         return res.json(course);
+    },
+
+    async getCoursesByCampus(req, res){
+        const course = await Course.find({"campus": req.params.campus});
+
+        return res.json(course);
     }
 };
