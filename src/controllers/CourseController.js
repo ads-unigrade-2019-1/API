@@ -34,10 +34,10 @@ module.exports = {
         for (const c in courses) {
             if (c.habilitation.length != 0) {
                 for(h in c.habilitation) {
-                    var habilitation_name = Habilitation.find({code: h});
+                    var course_habilitation = Habilitation.find({code: h});
 
                     var course = {
-                        name: c.name + ' - ' + habilitation_name,
+                        name: c.name + ' - ' + course_habilitation.name,
                         code: h
                     }
 
