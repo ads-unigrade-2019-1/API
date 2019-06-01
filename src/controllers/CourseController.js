@@ -1,4 +1,5 @@
 const Course = require('../models/Course');
+const Habilitation = require('../models/Habilitation');
 
 module.exports = {
     async getCourses(req, res){
@@ -29,7 +30,28 @@ module.exports = {
         }
         
         const courses = await Course.find({"campus": req.params.campus});
+        var results = [];
+        for (const c in courses) {
+            if (c.habilitation.length != 0) {
+                for(h in c.habilitation) {
+                    var habilitation_name = Habilitation.find({code: h});
 
-        return res.json(courses);
+                    var course = {
+                        name: c.name + ' - ' + habilitation_name,
+                        code: h
+                    }
+
+                    results.push(course);
+                }
+            } else {
+                var course = {
+                    name: c.name,
+                    code: c.code
+                }
+                results.push(course);
+            }
+        }
+
+        return res.json(results);
     }
 };
