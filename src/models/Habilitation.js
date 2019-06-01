@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const HabilitationSchema = new mongoose.Schema({
-    code : Number,
+    code : String,
     name : String,
     disciplines : [[[String]]]
 });
