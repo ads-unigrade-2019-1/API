@@ -18,5 +18,11 @@ module.exports = {
         const habilitation = await Habilitation.findById(req.params.id);
 
         return res.json(habilitation);
-    }
+    },
+    async getHabilitation(req, res){
+        const habilitation = await Habilitation.find({"code":req.params.code}); 
+
+        return res.json(habilitation);
+
+    },
 };

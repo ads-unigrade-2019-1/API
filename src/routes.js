@@ -30,7 +30,8 @@ routes.get('/course/:id', CourseController.getCourseById);
 
 routes.get('/habilitations', HabilitationController.getHabilitations);
 routes.post('/habilitation', HabilitationController.createHabilitation);
-routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
+// routes.get('/habilitation/:id', HabilitationController.getHabilitationById);
+routes.get('/habilitation/:code', HabilitationController.getHabilitation);
 
 routes.post('/search', SearchController.getFilterSearch);
 routes.post('/timetable', TimetableController.mountTimetable);
