@@ -2,56 +2,60 @@ const Course = require('../models/Course');
 const Habilitation = require('../models/Habilitation');
 
 module.exports = {
-    async getCourses(req, res){
-        const courses = await Course.find(); 
+    async getCourses(req, res) {
+        const courses = await Course.find();
 
         return res.json(courses);
 
     },
-    
-    async createCourse(req, res){
+
+    async createCourse(req, res) {
         const course = await Course.create(req.body);
 
-        return res.json(course); 
+        return res.json(course);
     },
 
-    async getCourseById(req, res){
+    async getCourseById(req, res) {
         const course = await Course.findById(req.params.id);
 
         return res.json(course);
     },
 
-    async getCoursesByCampus(req, res){
+    async getCoursesByCampus(req, res) {
 
         var campus = req.params.campus
 
-        if ( typeof(campus) != 'number' || (campus > 4 || campus < 1)) {
+        if (typeof (parseInt(campus)) != 'number' || parseInt(campus) > 4 || parseInt(campus) < 1) {
             return res.status(403).send("Wrong parameter");
         }
-        
-        const courses = await Course.find({"campus": req.params.campus});
+
+        const courses = await Course.find({ "campus": req.params.campus });
         var results = [];
+        var name = '';
         for (const c in courses) {
-            if (c.habilitation.length != 0) {
-                for(h in c.habilitation) {
-                    var course_habilitation = Habilitation.find({code: h});
 
-                    var course = {
-                        name: c.name + ' - ' + course_habilitation.name,
-                        code: h
-                    }
+            for (var h = 0; h < courses[c].habilitations.length; h++) {
 
-                    results.push(course);
+                var code = courses[c].habilitations[h].toString();
+
+                const habilitation = await Habilitation.find({ "code": code });
+
+                if (courses[c].habilitations && courses[c].habilitations.length > 1) {
+
+                    name = courses[c].name + " - " + habilitation[0].name;
+                } else {
+
+                    name = courses[c].name;
                 }
-            } else {
-                var course = {
-                    name: c.name,
-                    code: c.code
-                }
-                results.push(course);
             }
-        }
 
+            var course = {
+                name: name,
+                code: code
+            }
+
+            results.push(course);
+        }
         return res.json(results);
     }
 };
