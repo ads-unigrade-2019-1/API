@@ -31,30 +31,23 @@ module.exports = {
 
         const courses = await Course.find({ "campus": req.params.campus });
         var results = [];
-        var name = '';
+
         for (const c in courses) {
 
+            // enter here just if it has habilitations
             for (var h = 0; h < courses[c].habilitations.length; h++) {
 
                 var code = courses[c].habilitations[h].toString();
 
                 const habilitation = await Habilitation.find({ "code": code });
 
-                if (courses[c].habilitations && courses[c].habilitations.length > 1) {
-
-                    name = courses[c].name + " - " + habilitation[0].name;
-                } else {
-
-                    name = courses[c].name;
+                var name = habilitation[0].name;
+                var course = {
+                    name: name,
+                    code: code
                 }
+                results.push(course);
             }
-
-            var course = {
-                name: name,
-                code: code
-            }
-
-            results.push(course);
         }
         return res.json(results);
     }
