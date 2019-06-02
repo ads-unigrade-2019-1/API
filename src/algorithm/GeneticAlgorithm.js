@@ -100,8 +100,10 @@ class GeneticAlgorithm{
 
     _cleanResult(population){
         // order by selectedClasses length
-        population.sort((a, b) => a.selectedClasses.length < b.selectedClasses.length ? 1 : -1);
+        //population.sort((a, b) => a.selectedClasses.length < b.selectedClasses.length ? 1 : -1);
         
+        population.sort((a, b) => this._fitness(a) < this._fitness(b) ? 1 : -1);
+
         console.log(
             population.map((obj) => obj.selectedClasses.length)
         );
@@ -140,8 +142,11 @@ class GeneticAlgorithm{
             return GeneticAlgorithm._greedyGeneration(this.classes);
         }
 
+        let topElements = cleanedPopulation.slice(0, Math.min(5, cleanedPopulation.length)); 
+        console.log("Fitness: " + topElements.map((obj) => this._fitness(obj)).toString());
+
         // returns top 5 elements
-        return cleanedPopulation.slice(0, Math.min(5, cleanedPopulation.length));        
+        return topElements;        
     }
 
     _filterDuplicates(population){
@@ -257,8 +262,6 @@ class GeneticAlgorithm{
         let avaliation = this.currentPopulation.map(timeTable => {
             return [timeTable, this._fitness(timeTable)];
         });
-
-        // avaliation.sort((a, b) => a[1] > b[1] ? 1 : -1);
 
         return avaliation;
     }

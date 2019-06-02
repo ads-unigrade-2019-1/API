@@ -1,9 +1,9 @@
 const Classes = require('../models/Class');
-const TimeTable = require('../algorithm/TimeTable');
 const GeneticAlgorithm = require('../algorithm/GeneticAlgorithm');
 const CompatibilityRestriction = require('../algorithm/Restrictions/CompatibilityRestriction');
 const ClassesIncludedRestriction = require('../algorithm/Restrictions/ClassesIncludedRestriction');
 const PriorityRestriction = require('../algorithm/Restrictions/PriorityRestriction');
+const FreeTimeRestriction = require('../algorithm/Restrictions/FreeTimeRestriction');
 const Prando = require('prando');
 
 function compareClassesPriority(classA, classB) {
@@ -50,6 +50,7 @@ module.exports = {
             new CompatibilityRestriction(),
             new ClassesIncludedRestriction(0.6),
             new PriorityRestriction(0.8),
+            new FreeTimeRestriction(3)
         ];
 
         let geneticAlg = new GeneticAlgorithm(
