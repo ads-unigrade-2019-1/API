@@ -26,7 +26,9 @@ routes.post('/class', ClassController.createClass);
 
 routes.get('/courses', CourseController.getCourses);
 routes.post('/course', CourseController.createCourse);
-routes.get('/course/:id', CourseController.getCourseById);
+/* routes.get('/course/:id', CourseController.getCourseById); */
+routes.get('/course/:campus', CourseController.getCoursesByCampus);
+
 
 routes.get('/habilitations', HabilitationController.getHabilitations);
 routes.post('/habilitation', HabilitationController.createHabilitation);
