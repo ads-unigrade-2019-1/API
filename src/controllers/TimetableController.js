@@ -50,7 +50,7 @@ module.exports = {
             new CompatibilityRestriction(),
             new ClassesIncludedRestriction(0.6),
             new PriorityRestriction(0.8),
-            new FreeTimeRestriction(3)
+            new FreeTimeRestriction(2)
         ];
 
         let geneticAlg = new GeneticAlgorithm(
