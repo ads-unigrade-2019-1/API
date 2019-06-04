@@ -100,7 +100,7 @@ module.exports = {
 
                     for (let discipline of teacher_disciplines) {
 
-                        let gotDiscipline = await Disciplines.findOne({ 'code': discipline.discipline[0] })
+                        let gotDiscipline = await Disciplines.findOne({ 'code': discipline.discipline })
                             .then(currentDiscipline => {
                                 return currentDiscipline;
                             })
@@ -112,7 +112,6 @@ module.exports = {
                     let setDisciplines = getUnique(disciplinesFromTeacher, 'code');
 
                     return res.json(setDisciplines);
-
 
                 }).catch(callback_error);
 
