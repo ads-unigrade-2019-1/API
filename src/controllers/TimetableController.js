@@ -4,6 +4,7 @@ const CompatibilityRestriction = require('../algorithm/Restrictions/Compatibilit
 const ClassesIncludedRestriction = require('../algorithm/Restrictions/ClassesIncludedRestriction');
 const PriorityRestriction = require('../algorithm/Restrictions/PriorityRestriction');
 const FreeTimeRestriction = require('../algorithm/Restrictions/FreeTimeRestriction');
+const NumberConsistentRestriction = require("../algorithm/Restrictions/NumberConsistentRestriction");
 const Prando = require('prando');
 
 function compareClassesPriority(classA, classB) {
@@ -50,7 +51,8 @@ module.exports = {
             new CompatibilityRestriction(),
             new ClassesIncludedRestriction(0.6),
             new PriorityRestriction(0.8),
-            new FreeTimeRestriction(2)
+            new FreeTimeRestriction(2),
+            new NumberConsistentRestriction()
         ];
 
         let geneticAlg = new GeneticAlgorithm(
