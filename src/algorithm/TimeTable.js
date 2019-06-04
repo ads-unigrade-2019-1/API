@@ -13,6 +13,8 @@ class TimeTable{
         this._isConsistent = true;
 
         this._uncompatibilityMap = new Map();
+
+        this._daysMatrix = null;
     }
 
     get classes(){
@@ -24,6 +26,13 @@ class TimeTable{
         if (this._isUpdated === false) this._update();
 
         return this._selectedClasses;
+    }
+
+    get daysMatrix(){
+
+        if (this._isUpdated === false) this._update();
+
+        return this._daysMatrix;
     }
 
     set selectedClasses(classes){
@@ -219,11 +228,41 @@ class TimeTable{
         return true;
     }
 
+    _buildDaysMatrix(){
+        
+        // we can use _isConsistent and _selectedClasses
+        // private propertys because they are
+        // updated before daysMatrix
+        if (this._isConsistent == false) return null;
+
+        let daysMatrix = new Map();
+        
+        daysMatrix.set("Segunda", []);
+        daysMatrix.set("Terça", []);
+        daysMatrix.set("Quarta", []);
+        daysMatrix.set("Quinta", []);
+        daysMatrix.set("Sexta", []);
+        daysMatrix.set("Sábado", []);
+
+        this._selectedClasses.forEach((c) => {
+            c.meetings.forEach((m) => {
+                
+                let dayArray = daysMatrix.get(m.day);
+                dayArray.push(m);
+                
+                daysMatrix.set(m.day, dayArray);
+            });
+        });
+
+        return daysMatrix;
+    }
+
     _update(){
         // updates cached properties
 
         this._isConsistent = this._checkConsistency();
         this._selectedClasses = this._fromChromosome();
+        this._daysMatrix = this._buildDaysMatrix();
 
         this._isUpdated = true;
     }

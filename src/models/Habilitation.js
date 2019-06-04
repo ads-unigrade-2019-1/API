@@ -6,4 +6,4 @@ const HabilitationSchema = new mongoose.Schema({
     disciplines : [[[String]]]
 });
 
-const Habilitation = module.exports = mongoose.model('Habilitation', HabilitationSchema);
+module.exports = mongoose.model('Habilitation', HabilitationSchema);

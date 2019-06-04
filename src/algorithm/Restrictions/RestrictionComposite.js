@@ -33,7 +33,6 @@ class RestrictionComposite extends Restriction{
         let penalitiesSum = 0;
 
         for (const restriction of this.restrictons) {
-            
             penalitiesSum += restriction.apply(timeTable);
         }
         
