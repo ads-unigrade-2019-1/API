@@ -31,7 +31,7 @@ class GeneticAlgorithm{
         this._lastAverages = [];
 
         if (deterministic){
-            this.generationSeed = 85282812828521851841;
+            this.generationSeed = -12234;
             this.rng = new Prando(this.generationSeed);
         }else{
             this.rng = new Prando();
