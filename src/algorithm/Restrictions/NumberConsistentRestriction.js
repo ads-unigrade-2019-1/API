@@ -9,7 +9,7 @@ class NumberConsistentsRestriction extends HardRestriction {
     }
 
     apply(timetable) {
-        console.log(timetable.chromosome)
+
         for (let consistent of timetable.chromosome) {
             if (consistent) {
                 return 0;

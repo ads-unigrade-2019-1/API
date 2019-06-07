@@ -31,7 +31,7 @@ class GeneticAlgorithm{
         this._lastAverages = [];
 
         if (deterministic){
-            this.generationSeed = 85282812828521851841;
+            this.generationSeed = -12234;
             this.rng = new Prando(this.generationSeed);
         }else{
             this.rng = new Prando();
@@ -99,17 +99,9 @@ class GeneticAlgorithm{
     }
 
     _cleanResult(population){
-        // order by selectedClasses length
-        //population.sort((a, b) => a.selectedClasses.length < b.selectedClasses.length ? 1 : -1);
         
+        // order by fitness
         population.sort((a, b) => this._fitness(a) < this._fitness(b) ? 1 : -1);
-
-        console.log(
-            population.map((obj) => obj.selectedClasses.length)
-        );
-        console.log(
-            population.map((obj) => obj.isConsistent())
-        );
         
         // remove inconsistent and duplicated results
         population = population.filter((obj) => {return obj.isConsistent()});
@@ -118,10 +110,50 @@ class GeneticAlgorithm{
         return population
     }
 
+    _returnWithDebug(result, extraLogs){
+        
+        if(process.env.DEBUG){
+
+            if (Array.isArray(extraLogs)){
+                extraLogs.forEach((log) => {console.log(log)});
+            }else{
+                console.log("Extra: " + extraLogs);
+            }
+
+            let input =  this.classes.map((obj) => {
+                return obj.discipline + "_" + obj.name;
+            });
+            console.log("Input: " + input);
+
+            let lengths = result.map((obj) => obj.selectedClasses.length);
+            console.log("Lengths: " + lengths);
+
+            let fitness = result.map((obj) => this._fitness(obj)).toString();
+            console.log("Fitness: " + fitness);
+            
+            let resultText = result.map((c) => {
+                return c.selectedClasses.map((obj) => {
+                    return obj.discipline + "_" + obj.name;
+                }) + " ___ ";
+            });
+            console.log("Result: " + resultText);
+        }
+
+        return result;
+    }
+
     run(){
         // returns the list of best timetables after
         // algorithm application
-        
+
+        let greedy = GeneticAlgorithm._greedyGeneration(this.classes);
+        if (this.classes.length <= 2){
+            return this._returnWithDebug(
+                greedy,
+                "Fallback to greedy: less than 3 classes"
+            );
+        }
+
         this.currentPopulation = this._generateInitialPopulation();
 
         for (let i = 0; i < this.maxGenerations; i++) {
@@ -139,14 +171,15 @@ class GeneticAlgorithm{
 
         // fallback to greedy implementation
         if (cleanedPopulation.length < 1){
-            return GeneticAlgorithm._greedyGeneration(this.classes);
+            return this._returnWithDebug(
+                greedy,
+                "Fallback to Greedy: not enough results"
+            );
         }
 
-        let topElements = cleanedPopulation.slice(0, Math.min(5, cleanedPopulation.length)); 
-        console.log("Fitness: " + topElements.map((obj) => this._fitness(obj)).toString());
-
         // returns top 5 elements
-        return topElements;        
+        let topElements = cleanedPopulation.slice(0, Math.min(5, cleanedPopulation.length)); 
+        return this._returnWithDebug(topElements);        
     }
 
     _filterDuplicates(population){
