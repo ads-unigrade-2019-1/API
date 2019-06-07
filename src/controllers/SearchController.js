@@ -19,12 +19,6 @@ function make_pattern(search_string) {
     // split into words
     let words = search_string.split(/\s+/);
 
-    // sort by length
-    let length_comp = function (a,b) {
-        return b.length - a.length;
-    };
-    words.sort(length_comp);
-
     // replace characters by their compositors
     let accent_replacer = function(chr) {
         return accented[chr.toUpperCase()] || chr;
@@ -100,7 +94,7 @@ module.exports = {
 
                     for (let discipline of teacher_disciplines) {
 
-                        let gotDiscipline = await Disciplines.findOne({ 'code': discipline.discipline[0] })
+                        let gotDiscipline = await Disciplines.findOne({ 'code': discipline.discipline })
                             .then(currentDiscipline => {
                                 return currentDiscipline;
                             })
@@ -112,7 +106,6 @@ module.exports = {
                     let setDisciplines = getUnique(disciplinesFromTeacher, 'code');
 
                     return res.json(setDisciplines);
-
 
                 }).catch(callback_error);
 
