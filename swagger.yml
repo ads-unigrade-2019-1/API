@@ -5,9 +5,6 @@ info:
   description: >
     ## Visão Geral
       UniGrade é uma aplicação Android já desenvolvida anteriormente por alguns membros do grupo que tem como objetivo oferecer a alunos da UnB várias opções de grade horária a partir de alguns dados fornecidos pelo usuário.
-license:
-  name: 'Apache 2.0'
-  url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 host: 'mwapi.herokuapp.com'
 tags:
   - name: Disciplines
