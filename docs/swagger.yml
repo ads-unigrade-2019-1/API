@@ -1,4 +1,26 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  version: "1.0"
-  title: "Documentação API unigrade"
+  version: '1.0'
+  title: 'Documentação API unigrade'
+  description: >
+    ## Visão Geral
+      UniGrade é uma aplicação Android já desenvolvida anteriormente por alguns membros do grupo que tem como objetivo oferecer a alunos da UnB várias opções de grade horária a partir de alguns dados fornecidos pelo usuário.
+license:
+  name: 'Apache 2.0'
+  url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+host: 'mwapi.herokuapp.com'
+tags:
+  - name: Disciplines
+    description: Disciplines Controller
+paths:
+  /disciplines:
+    get:
+      tags:
+        - 'Disciplines'
+      summary: 'retorna todas as disciplinas cadastradas'
+      description: 'retorna todas as disciplinas cadastradas'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
