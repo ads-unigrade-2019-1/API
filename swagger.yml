@@ -3,19 +3,135 @@ info:
   version: '1.0'
   title: 'Documentação API unigrade'
   description: >
-    ## Visão Geral
-      UniGrade é uma aplicação Android já desenvolvida anteriormente por alguns membros do grupo que tem como objetivo oferecer a alunos da UnB várias opções de grade horária a partir de alguns dados fornecidos pelo usuário.
-host: 'mwapi.herokuapp.com'
+                ## Visão Geral
+                  UniGrade é uma aplicação Android já desenvolvida anteriormente por alguns membros do grupo que tem como objetivo oferecer a alunos da UnB várias opções de grade horária a partir de alguns dados fornecidos pelo usuário.
+
+host: "mwapi.herokuapp.com"
 tags:
-  - name: Disciplines
-    description: Disciplines Controller
+  - name: Discipline
+    description: Discipline Controller
+  - name: Class
+    description: Class Controller
+  - name: Course
+    description: Course Controller
+  - name: Habilitation
+    description: Habilitation Controller
+
 paths:
   /disciplines:
     get:
       tags:
-        - 'Disciplines'
+        - 'Discipline'
       summary: 'retorna todas as disciplinas cadastradas'
-      description: 'retorna todas as disciplinas cadastradas'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+          
+
+  /discipline/{code}:
+    get:
+      tags:
+        - 'Discipline'
+      summary: 'retorna uma disciplina especifica'
+      parameters:
+      - in: "path"
+        name: "code"
+        type: "integer"
+        description: "Código para a disciplina especifica"
+        required: true
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+  /classes:
+    get:
+      tags:
+        - 'Class'
+      summary: 'retorna todas as turmas cadastradas'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+  /classes/{code}:
+    get:
+      tags:
+        - 'Class'
+      summary: 'retorna todas as turmas de uma disciplina especifica'
+      parameters:
+      - in: "path"
+        name: "code"
+        type: "integer"
+        description: "Código para uma disciplina especifica"
+        required: true
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+
+  /classes/{code}/{name}:
+    get:
+      tags:
+        - 'Class'
+      summary: 'retorna uma turma especifica de um disciplina especifica'
+      parameters:
+      - in: "path"
+        name: "code"
+        type: "integer"
+        description: "Código para uma disciplina especifica"
+        required: true
+      - in: "path"
+        name: "name"
+        type: "string"
+        description: "nome identificador da turma especifica"
+        required: true
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+  /courses:
+    get:
+      tags:
+        - 'Course'
+      summary: 'retorna todos os cursos cadastrados'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+  /course/{campus}:
+    get:
+      tags:
+        - 'Course'
+      summary: 'retorna todos os cursos cadastrados em um campos especifico'
+      parameters:
+      - in: "path"
+        name: "campus"
+        type: "integer"
+        description: >
+                      codigo para um campus especifico
+
+                      #### 1 - Campus Darcy Ribeiro
+                      
+                      #### 2 - Campus Planaltina
+
+                      #### 3 - Campus Ceilândia
+
+                      #### 4 - Campus Gama
+                      
+              
+        enum: [1,2,3,4]
+        required: true
       produces:
         - 'application/json'
       responses:
