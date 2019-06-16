@@ -16,6 +16,8 @@ tags:
     description: Course Controller
   - name: Habilitation
     description: Habilitation Controller
+  - name: Timetable
+    description: Timetable Controller
 
 paths:
   /disciplines:
@@ -160,6 +162,17 @@ paths:
         type: "integer"
         description: "Código para uma habilitação especifica"
         required: true
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+  /timetable/r:
+    get:
+      tags:
+        - 'Timetable'
+      summary: 'retorna uma grade com horarios aletórios '
       produces:
         - 'application/json'
       responses:
