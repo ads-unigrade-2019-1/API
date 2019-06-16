@@ -1,12 +1,14 @@
 swagger: '2.0'
 info:
   version: '1.0'
-  title: 'Documentação API unigrade'
+  title: 'API unigrade - Documentação'
   description: >
-                ## Visão Geral
-                  UniGrade é uma aplicação Android já desenvolvida anteriormente por alguns membros do grupo que tem como objetivo oferecer a alunos da UnB várias opções de grade horária a partir de alguns dados fornecidos pelo usuário.
+    ## Visão Geral
+      UniGrade é uma aplicação Android já desenvolvida anteriormente por alguns membros do grupo que tem como objetivo oferecer a alunos da UnB várias opções de grade horária a partir de alguns dados fornecidos pelo usuário.
+      
+      Aqui estão as rotas fornecidas pela api, feita em REST, detalhadas e explicadas
 
-host: "mwapi.herokuapp.com"
+host: 'mwapi.herokuapp.com'
 tags:
   - name: Discipline
     description: Discipline Controller
@@ -16,6 +18,8 @@ tags:
     description: Course Controller
   - name: Habilitation
     description: Habilitation Controller
+  - name: Search
+    description: Search Controller
   - name: Timetable
     description: Timetable Controller
 
@@ -30,7 +34,6 @@ paths:
       responses:
         200:
           description: 'OK'
-          
 
   /discipline/{code}:
     get:
@@ -38,11 +41,11 @@ paths:
         - 'Discipline'
       summary: 'retorna uma disciplina especifica'
       parameters:
-      - in: "path"
-        name: "code"
-        type: "integer"
-        description: "Código para a disciplina especifica"
-        required: true
+        - in: 'path'
+          name: 'code'
+          type: 'integer'
+          description: 'Código para a disciplina especifica'
+          required: true
       produces:
         - 'application/json'
       responses:
@@ -66,17 +69,16 @@ paths:
         - 'Class'
       summary: 'retorna todas as turmas de uma disciplina especifica'
       parameters:
-      - in: "path"
-        name: "code"
-        type: "integer"
-        description: "Código para uma disciplina especifica"
-        required: true
+        - in: 'path'
+          name: 'code'
+          type: 'integer'
+          description: 'Código para uma disciplina especifica'
+          required: true
       produces:
         - 'application/json'
       responses:
         200:
           description: 'OK'
-
 
   /classes/{code}/{name}:
     get:
@@ -84,16 +86,16 @@ paths:
         - 'Class'
       summary: 'retorna uma turma especifica de um disciplina especifica'
       parameters:
-      - in: "path"
-        name: "code"
-        type: "integer"
-        description: "Código para uma disciplina especifica"
-        required: true
-      - in: "path"
-        name: "name"
-        type: "string"
-        description: "nome identificador da turma especifica"
-        required: true
+        - in: 'path'
+          name: 'code'
+          type: 'integer'
+          description: 'Código para uma disciplina especifica'
+          required: true
+        - in: 'path'
+          name: 'name'
+          type: 'string'
+          description: 'nome identificador da turma especifica'
+          required: true
       produces:
         - 'application/json'
       responses:
@@ -117,23 +119,22 @@ paths:
         - 'Course'
       summary: 'retorna todos os cursos cadastrados em um campos especifico'
       parameters:
-      - in: "path"
-        name: "campus"
-        type: "integer"
-        description: >
-                      codigo para um campus especifico
+        - in: 'path'
+          name: 'campus'
+          type: 'integer'
+          description: >
+            codigo para um campus especifico
 
-                      #### 1 - Campus Darcy Ribeiro
-                      
-                      #### 2 - Campus Planaltina
+            #### 1 - Campus Darcy Ribeiro
 
-                      #### 3 - Campus Ceilândia
+            #### 2 - Campus Planaltina
 
-                      #### 4 - Campus Gama
-                      
-              
-        enum: [1,2,3,4]
-        required: true
+            #### 3 - Campus Ceilândia
+
+            #### 4 - Campus Gama
+
+          enum: [1, 2, 3, 4]
+          required: true
       produces:
         - 'application/json'
       responses:
@@ -157,16 +158,48 @@ paths:
         - 'Habilitation'
       summary: 'retorna uma habilitação especifica'
       parameters:
-      - in: "path"
-        name: "code"
-        type: "integer"
-        description: "Código para uma habilitação especifica"
-        required: true
+        - in: 'path'
+          name: 'code'
+          type: 'integer'
+          description: 'Código para uma habilitação especifica'
+          required: true
       produces:
         - 'application/json'
       responses:
         200:
           description: 'OK'
+
+  /search:
+    post:
+      tags:
+        - 'Search'
+      summary: 'Faz busca por matérias em todos os Campus'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: 'body'
+          name: 'class or discipline'
+          description: 'nome de classe ou disciplina para pesquisar sua existência na universidade'
+          required: true
+      responses:
+        200:
+          description: 'OK'
+
+  /timetable:
+    post:
+      tags:
+        - 'Timetable'
+      summary: 'retorna possíveis grades com as matérias informadas'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+    parameters:
+      - in: 'body'
+        name: 'disciplines'
+        description: 'Lista de disciplinas desejadas no semestre'
+        required: true
 
   /timetable/r:
     get:
