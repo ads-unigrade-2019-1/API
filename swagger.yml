@@ -98,3 +98,43 @@ paths:
         200:
           description: 'OK'
 
+  /courses:
+    get:
+      tags:
+        - 'Course'
+      summary: 'retorna todos os cursos cadastrados'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+  /course/{campus}:
+    get:
+      tags:
+        - 'Course'
+      summary: 'retorna todos os cursos cadastrados em um campos especifico'
+      parameters:
+      - in: "path"
+        name: "campus"
+        type: "integer"
+        description: >
+                      codigo para um campus especifico
+
+                      #### 1 - Campus Darcy Ribeiro
+                      
+                      #### 2 - Campus Planaltina
+
+                      #### 3 - Campus Ceilândia
+
+                      #### 4 - Campus Gama
+                      
+              
+        enum: [1,2,3,4]
+        required: true
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
