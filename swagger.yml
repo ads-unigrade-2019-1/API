@@ -138,3 +138,30 @@ paths:
         200:
           description: 'OK'
 
+  /habilitations:
+    get:
+      tags:
+        - 'Habilitation'
+      summary: 'retorna todas as habilitações cadastradas'
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
+
+  /habilitation/{code}:
+    get:
+      tags:
+        - 'Habilitation'
+      summary: 'retorna uma habilitação especifica'
+      parameters:
+      - in: "path"
+        name: "code"
+        type: "integer"
+        description: "Código para uma habilitação especifica"
+        required: true
+      produces:
+        - 'application/json'
+      responses:
+        200:
+          description: 'OK'
