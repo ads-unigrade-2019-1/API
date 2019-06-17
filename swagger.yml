@@ -179,8 +179,10 @@ paths:
       parameters:
         - in: 'body'
           name: 'class or discipline'
-          description: 'nome de classe ou disciplina para pesquisar sua existência na universidade'
+          description: 'nome de professor, disciplina e código da disciplina para pesquisar na universidade'
           required: true
+          schema:
+            $ref: '#/definitions/search'
       responses:
         200:
           description: 'OK'
@@ -200,6 +202,8 @@ paths:
         name: 'disciplines'
         description: 'Lista de disciplinas desejadas no semestre'
         required: true
+        schema:
+          $ref: '#/definitions/timetable'
 
   /timetable/r:
     get:
@@ -211,3 +215,55 @@ paths:
       responses:
         200:
           description: 'OK'
+
+definitions:
+  search:
+    type: 'object'
+    properties:
+      search:
+        type: 'string'
+        description: 'nome do professor, disciplina ou código da disciplina'
+  timetable:
+    type: 'array'
+    items:
+      type: 'object'
+      properties:
+        name:
+          type: 'string'
+          description: 'Turma da matéria'
+        vacancies:
+          type: 'number'
+          description: 'número de vagas'
+        teachers:
+          type: 'array'
+          items:
+            type: 'string'
+            description: 'nome dos professores desta matéria'
+        meetings:
+          type: 'array'
+          items:
+            type: 'object'
+            properties:
+              room:
+                type: 'string'
+                description: 'sala da matéria'
+              day:
+                type: 'string'
+                description: 'dia da aula'
+              init_hour:
+                type: 'string'
+                description: 'início da aula'
+              final_hour:
+                type: 'string'
+                description: 'final da aula'
+        discipline:
+          type: 'string'
+          description: 'nome da diciplina'
+        shift:
+          type: 'string'
+          description: 'turno'
+        campus:
+          type: 'number'
+        priority:
+          type: 'integer'
+          description: prioridade da matéria
