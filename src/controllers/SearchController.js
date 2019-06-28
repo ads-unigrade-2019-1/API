@@ -1,15 +1,9 @@
 const Disciplines = require('../models/Discipline');
 const Classes = require('../models/Class');
 
-function getUnique(arr, index) {
-
-    const unique = arr
-        .map(elem => elem[index])
-        .map((elem, indexInside, final) => final.indexOf(elem) === indexInside && indexInside)
-        .filter(elem => arr[elem]).map(elem => arr[elem]);
-  
-     return unique;
-}
+const TeacheSearch = require('./search/TeacherSearch');
+const CodeSearch = require('./search/codeSearch');
+const NameDisciplineSearch = require('./search/NameDisciplineSearch');
 
 function make_pattern(search_string) {
 
@@ -71,45 +65,18 @@ module.exports = {
         }
 
         const filterSearch = make_pattern(req.body.search);
+        
+        let nameSearch = new NameDisciplineSearch();
+        let codeSearch = new CodeSearch();
+        let teacheSearch = new TeacheSearch();
 
-        let callback_error = function(error) {
-            res.json({ 'error': `Unable to do search: ${error}` });
-        };
+        //Cases visited in chain of responsibility
+        nameSearch.setNext(codeSearch);
+        codeSearch.setNext(teacheSearch);
 
-        Disciplines.find({
-            $or: [
-                { 'name': filterSearch },
-                { 'code': filterSearch }
-            ]
-        }).then(async disciplines => {
+        // Header of list
+        nameSearch.execute(req, res,filterSearch);
 
-            if (disciplines.length !== 0){
-                return res.json(disciplines);
-            }
-
-            await Classes.find({ 'teachers': new RegExp(req.body.search, "i") })
-                .then(async teacher_disciplines => {
-
-                    let disciplinesFromTeacher = [];
-
-                    for (let discipline of teacher_disciplines) {
-
-                        let gotDiscipline = await Disciplines.findOne({ 'code': discipline.discipline })
-                            .then(currentDiscipline => {
-                                return currentDiscipline;
-                            })
-                            .catch(callback_error);
-
-                        disciplinesFromTeacher.push(gotDiscipline);
-                    }
-
-                    let setDisciplines = getUnique(disciplinesFromTeacher, 'code');
-
-                    return res.json(setDisciplines);
-
-                }).catch(callback_error);
-
-        }).catch(callback_error);
     }
 
 };
