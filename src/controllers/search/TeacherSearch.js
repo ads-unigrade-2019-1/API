@@ -9,6 +9,7 @@ class TeacherSearch extends Chain {
     constructor() {
         super();
         this.nextInChain;
+        this.filterSearch = '';
     }
 
     setNext(c) {
@@ -26,8 +27,15 @@ class TeacherSearch extends Chain {
          return unique;
     }
 
-    async execute(req, res, filterSearch) {
-        await Classes.find({ 'teachers': filterSearch })
+    async execute(req, res) {
+
+        if (req.body.search == null){
+            return res.json({ 'error': '400 - Bad Request'});
+        }
+
+        this.filterSearch = this.make_pattern(req.body.search);
+
+        await Classes.find({ 'teachers': this.filterSearch })
             .then(async teacher_disciplines => {
 
                 let disciplinesFromTeacher = [];
