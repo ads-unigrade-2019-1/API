@@ -1,6 +1,3 @@
-const Disciplines = require('../models/Discipline');
-const Classes = require('../models/Class');
-
 const TeacheSearch = require('./search/TeacherSearch');
 const CodeSearch = require('./search/codeSearch');
 const NameDisciplineSearch = require('./search/NameDisciplineSearch');
