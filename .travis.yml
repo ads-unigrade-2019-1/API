@@ -1,0 +1,29 @@
+language: node_js
+node_js:
+  - "node"
+
+jobs:
+  include:
+
+    - stage: test
+      script: yarn lint # TODO: add test if we create unit tests
+
+    - stage: deploy
+      script: skip     # usually you do not want to rerun any tests
+      deploy: &heroku
+        # deploy develop to the staging environment
+        - provider: heroku
+          api_key:
+            $PRODUCTION_API_KEY
+          app:
+            $PRODUCTION_APPNAME
+          on: 
+            branch: master
+            
+        - provider: heroku
+          api_key:
+            $DEVELOPMENT_API_KEY    
+          app:
+            $DEVELOPMENT_APPNAME
+          on:
+            branch: develop
